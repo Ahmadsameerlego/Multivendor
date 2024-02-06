@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800&display=swap');
+body{
+    font-weight: 300;
+    padding:0;
+    margin: 0;
+    box-sizing: border-box;
+    direction: rtl;
+    text-align: start;
+    font-family: 'Cairo', sans-serif !important;
+    font-size: 13px !important;
+    overflow-x:hidden;
+    background-color: #fff;
+    color: #1D1D1D;
+}
+.p-component{
+        font-family: 'Cairo', sans-serif !important;
+}
+#app{
+    font-family: 'Cairo', sans-serif !important;
+}
+.mainColor{
+    color: #734b21;
+}
+// color variables
+
+$main-color1: #734b21;
+$main-color2: #6D98DB   ;
+// $main-color3: #285A7C;
+
+// $main-white1: #ECF6FF;
+// $main-white2: #F6F5F5;
+
+// $main-green: #7BE099;
+
+// $main-red: #E26767;
+
+// $main-gradian1: linear-gradient(to top, #28D6F8 , #21B1F8);
+// $main-gradian2: linear-gradient(to bottom, #2EBAFF , #1E88BC);
+
+.bordered_btn{
+    text-decoration: none;
+    color: $main-color2;
+    border: 1px solid $main-color2;
+    border-radius: 5px;
+    padding: 7px 19px;
+}
+.main_btn{
+    position: relative;
+    text-decoration: none;
+    color: #fff;
+    background-color: $main-color1;
+    border-radius: 5px;
+    padding: 7px 7px;
+    transition: .3s;
+    border: none;
+    &:hover{
+        background-color:  $main-color1 !important;
+    }
+}
+.flex_center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.flex_column{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.flex_between{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.site_title{
+    color: $main-color1;
+}
+.mainColor{color: $main-color1 !important;}
+.mainColor2{color: $main-color2;}
+.whiteColor { color:#fff }
+.grayColor{ color: #86888A; }
+.grayBg{
+    background-color: #F5F5F5;
+}
+.boxShadow{ box-shadow: 0px 5px 10px rgba(158, 158, 158, 0.322); }
+.decoration-none{text-decoration: none;}
+.border-0{
+    border: none;
+}
+.br-50{
+    border-radius: 50%;
+}
+.flex_end{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+.o-5{
+    opacity: .5;
+}
+.bordered_gray{
+    border: 1px solid #ccc;
+}
+.fw-6{
+    font-weight: 600;
+}
+.fw-5{
+    font-weight: 500;
+}
+.br-5{
+    border-radius: 5px;
+}
+.br-7{
+    border-radius: 7px;
+}
+.br-10{
+    border-radius: 10px;
+}
+.br-15{
+    border-radius: 15px;
+}
+.br-20{
+    border-radius: 20px;
+}
+.br-50px{
+    border-radius: 50px;
+}
+.normal_font{
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 11px;
+}
+.w-60{
+    width: 60%;
+}
+.fs-8{
+    font-size: 8px;
+}
+.fs-9{
+    font-size: 9px;
+}
+.fs-10{
+    font-size: 10px;
+}
+.fs-11{
+    font-size: 11px;
+}
+.fs-12{
+    font-size: 12px;
+}
+.fs-13{
+    font-size: 13px;
+}
+.fs-14{
+    font-size: 14px;
+}
+.fs-15{
+    font-size: 15px;
+}
+.fs-16{
+    font-size: 16px;
+}
+.fs-17{
+    font-size: 17px;
+}
+.fs-18{
+    font-size: 18px;
+}
+// ---------------- spaces ---------------- //
+.m-end-5{
+    margin-inline-end: 5px;
+}
+.m-end-10{
+    margin-inline-end: 10px;
+}
+// component
+.grow-1{
+    flex-grow: 1;
+}
+.gap-10{
+    gap:10px;
+}
+// 
+// .opacityMainColor{color: $opacity-main-color;}
+// .opacityMainColor2{color: $opacity-main-color2;}
+
+// .bgColor{color: $bg-color;}
+// .bgColor2{color: $bg-color2;}
+
+// .opacityBgColor{color: $opacity-bg-color;}
+// .opacityBgColor2{color: $opacity-bg-color2;}
+
+
+/* scrollbar custom */
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #BF4D66;
+    border-radius: 5px;
+}
+.footer_bottom{
+    display: flex;
+    justify-content: space-between ;
+    align-items:baseline;
+}
+.singleHead img{
+    width: 100%;
+}
+
+
+.lazy {
+    position: relative;
+    max-width: 92%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    animation: up-and-down 5s linear infinite;
+}
+@keyframes up-and-down {
+    0%,
+    100% {
+        top: 0;
+    }
+    50% {
+        top: -50px;
+    }
+}
+.border-bottom{
+    border-bottom: 1px solid #ffffff3f !important;
+}
+
+.normal_link{
+    color: inherit !important;
+    text-decoration: none !important;
+}
