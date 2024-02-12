@@ -85,7 +85,7 @@
 
                                                 <div class="product-price d-flex flex-column align-items-end">
                                                     <span class="fw-6"> 330 ر.س </span>
-                                                    <button class="btn main_btn br-50 w-20 h-20 mt-3 px-0 pt-0 pb-0 addCartButton"> + </button>
+                                                    <button class="btn main_btn br-50 w-20 h-20 mt-3 px-0 pt-0 pb-0 addCartButton" @click="$router.push('/cart')"> + </button>
                                                 </div>
                                             </div>
                                         </div>
