@@ -1,7 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store';
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
 
 import VueI18n from "vue-i18n";
 import i18n from "./plugins/i18n";
@@ -19,7 +19,6 @@ import "primevue/resources/primevue.min.css";
 
 import ToastService from "primevue/toastservice";
 
-
 // import fontawesome
 import { library, dom } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -29,29 +28,25 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 library.add(fas, far, fab);
 dom.watch();
 
-
 import VOtpInput from "vue3-otp-input";
 
-import VueGoogleMaps from '@fawmi/vue-google-maps'
-
+import VueGoogleMaps from "@fawmi/vue-google-maps";
 
 // import axios
-import axios from 'axios';
-axios.defaults.baseURL = 'https://backend.cvbroadcast.com/api/v1/';
-// axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');   
+import axios from "axios";
+axios.defaults.baseURL = "https://backend.cvbroadcast.com/api/v1/";
+// axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.headers.lang = localStorage.getItem('locale');
-
+axios.defaults.headers.lang = localStorage.getItem("locale");
 
 // import pagination
 import Paginate from "vuejs-paginate-next";
 
 // importing AOS css style globally
-import 'aos/dist/aos.css'
+import "aos/dist/aos.css";
 
-// main styles 
-import './assets/css/style.scss'
-
+// main styles
+import "./assets/css/style.scss";
 
 createApp(App)
   .use(store)
@@ -65,7 +60,7 @@ createApp(App)
   .use(ToastService)
   .use(VueGoogleMaps, {
     load: {
-      key: "AIzaSyB4d19CAL7u_hJ8k4P7EaQFcnner_Q9KEo",
+      key: "AIzaSyBocLD03Q46fI98jNaLr0-0xlcYRj3xhfE",
       libraries: "places",
     },
   })

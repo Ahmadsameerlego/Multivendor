@@ -7,7 +7,8 @@ import reserve from "../views/client/reserveView.vue";
 import cart from "../views/client/cartView.vue";
 import complete from "../views/client/completeOrder.vue";
 import login from "../views/client/loginView.vue";
-import register from "../views/client/registerView.vue"
+import register from "../views/client/registerView.vue";
+import completeReserve from "../views/client/completeReserve.vue";
 
 const routes = [
   {
@@ -50,6 +51,10 @@ const routes = [
   {
     path: "/register",
     component: register,
+  },
+  {
+    path: "/completeReserve",
+    component: completeReserve,
   },
 ];
 
