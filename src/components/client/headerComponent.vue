@@ -47,13 +47,12 @@
                 </router-link>
               </li>
               <li class="nav-item kEkINZ pa-m-0 become-partner-li px-sm">
-                <a
+                <router-link
                   rel="noreferrer"
-                  href="https://eg.partner.talabat.com/s/?language=ar"
-                  target="_blank"
                   class="jYUbJg pa-m-10 f-m-14"
-                  >انضم كشريك</a
-                >
+                  to="/offers"
+                  >العروض والخصومات
+                </router-link>
               </li>
               <li class="nav-item kEkINZ d-sm-block px-2">
                 <a

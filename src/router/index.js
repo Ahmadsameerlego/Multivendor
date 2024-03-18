@@ -9,6 +9,7 @@ import complete from "../views/client/completeOrder.vue";
 import login from "../views/client/loginView.vue";
 import register from "../views/client/registerView.vue";
 import completeReserve from "../views/client/completeReserve.vue";
+import offers from "../views/client/offersView.vue"
 
 const routes = [
   {
@@ -55,6 +56,10 @@ const routes = [
   {
     path: "/completeReserve",
     component: completeReserve,
+  },
+  {
+    path: "/offers",
+    component: offers,
   },
 ];
 

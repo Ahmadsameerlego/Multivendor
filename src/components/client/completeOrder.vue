@@ -80,21 +80,54 @@
       <div class="mt-5 flex_center">
         <button class="main_btn pt-2 pb-2 px-5">ادفع الان</button>
       </div>
+      <div class="mt-5 flex_center">
+        <button class="main_btn pt-2 pb-2 px-5" @click="visible = true">
+          قيم المتجر
+        </button>
+      </div>
     </div>
   </div>
+
+  <Dialog
+    v-model:visible="visible"
+    modal
+    header="قيم المتجر"
+    :style="{ width: '45rem' }"
+  >
+    <Rating v-model="value" :cancel="false" class="flex_center" />
+
+    <div class="form-group mt-4">
+      <label for=""> اترك تعليق </label>
+      <textarea rows="5" cols="" class="form-control"></textarea>
+    </div>
+
+    <div class="flex_center mt-4">
+      <button class="main_btn pt-2 pb-2 px-5">تاكيد</button>
+    </div>
+  </Dialog>
 </template>
 
 <script>
+import Dialog from "primevue/dialog";
+import Rating from "primevue/rating";
+
 export default {
   name: "MultivendorCompleteOrder",
 
   data() {
-    return {};
+    return {
+      visible: false,
+      value: 0,
+    };
   },
 
   mounted() {},
 
   methods: {},
+  components: {
+    Dialog,
+    Rating,
+  },
 };
 </script>
 

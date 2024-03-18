@@ -80,6 +80,74 @@
       </div>
     </form>
   </div>
+
+  <!-- most order  -->
+  <div class="mt-5 container">
+    <h5 class="fw-bold mainColor text-end">منتجات متشابهة</h5>
+    <p class="fw-bold  text-end">
+      عادة ما يطلب المستخدمين ايضا هذه الطلبات
+    </p>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="single_menu mb-3 flex_between">
+          <div class="prod-image">
+            <img src="@/assets/imgs/coffee.webp" alt="" />
+          </div>
+
+          <div class="mx-3 d-flex align-items-start flex-column">
+            <h6 class="fw-bold">Expresso</h6>
+
+            <div>
+              <span class="grayColor fw-6 fs-6">
+                Lorem ipsum dolor sit amet.
+              </span>
+            </div>
+
+            <div class=""></div>
+          </div>
+
+          <div class="product-price d-flex flex-column align-items-end">
+            <span class="fw-6"> 330 ر.س </span>
+            <button
+              class="btn main_btn br-50 w-20 h-20 mt-3 px-0 pt-0 pb-0 addCartButton"
+              @click="$router.push('/cart')"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="single_menu mb-3 flex_between">
+          <div class="prod-image">
+            <img src="@/assets/imgs/coffee.webp" alt="" />
+          </div>
+
+          <div class="mx-3 d-flex align-items-start flex-column">
+            <h6 class="fw-bold">Expresso</h6>
+
+            <div>
+              <span class="grayColor fw-6 fs-6">
+                Lorem ipsum dolor sit amet.
+              </span>
+            </div>
+
+            <div class=""></div>
+          </div>
+
+          <div class="product-price d-flex flex-column align-items-end">
+            <span class="fw-6"> 330 ر.س </span>
+            <button
+              class="btn main_btn br-50 w-20 h-20 mt-3 px-0 pt-0 pb-0 addCartButton"
+              @click="$router.push('/cart')"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
