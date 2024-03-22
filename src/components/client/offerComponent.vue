@@ -53,9 +53,107 @@
         </TabPanel>
         <TabPanel header="الخصومات">
           <div class="discounts">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="single-discount"></div>
+            <h6 class="mb-4">احصل على خصومات فورية على اصناف مختارة</h6>
+            <div class="row mt-4">
+              <div class="col-md-4 mb-3">
+                <router-link to="/market/1" class="normal_link">
+                  <div
+                    class="single_market flex_center flex-column position-relative"
+                  >
+                    <div class="market_image">
+                      <img src="@/assets/imgs/coffee.webp" alt="" />
+                    </div>
+
+                    <div class="market_name mt-3">
+                      <span class="fs-5 fw-bold market-item">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="mx-3"> Bolivard </span>
+                      </span>
+                    </div>
+
+                    <div class="market_type">
+                      <span class="fs-6 fw-6 market-item">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span class="mx-3"> coffee , cake </span>
+                      </span>
+                    </div>
+                    <div class="market_type">
+                      <span class="fs-7 fw-6 market-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span class="mx-3"> يبعد 10 كم </span>
+                      </span>
+                    </div>
+
+                    <!-- discount  -->
+                    <div class="discount">20 %</div>
+                  </div>
+                </router-link>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <router-link to="/market/1" class="normal_link">
+                  <div class="single_market flex_center flex-column">
+                    <div class="market_image">
+                      <img src="@/assets/imgs/cake.jpg" alt="" />
+                    </div>
+
+                    <div class="market_name mt-3">
+                      <span class="fs-5 fw-bold market-item">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="mx-3"> Bolivard </span>
+                      </span>
+                    </div>
+
+                    <div class="market_type">
+                      <span class="fs-6 fw-6 market-item">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span class="mx-3"> coffee , cake </span>
+                      </span>
+                    </div>
+                    <div class="market_type">
+                      <span class="fs-7 fw-6 market-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span class="mx-3"> يبعد 10 كم </span>
+                      </span>
+                    </div>
+
+                    <!-- discount  -->
+                    <div class="discount">20 %</div>
+                  </div>
+                </router-link>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <router-link to="/market/1" class="normal_link">
+                  <div class="single_market flex_center flex-column">
+                    <div class="market_image">
+                      <img src="@/assets/imgs/coffee1.webp" alt="" />
+                    </div>
+
+                    <div class="market_name mt-3">
+                      <span class="fs-5 fw-bold market-item">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="mx-3"> Bolivard </span>
+                      </span>
+                    </div>
+
+                    <div class="market_type">
+                      <span class="fs-6 fw-6 market-item">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span class="mx-3"> coffee , cake </span>
+                      </span>
+                    </div>
+                    <div class="market_type">
+                      <span class="fs-7 fw-6 market-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span class="mx-3"> يبعد 10 كم </span>
+                      </span>
+                    </div>
+
+                    <!-- discount  -->
+                    <div class="discount">20 %</div>
+                  </div>
+                </router-link>
               </div>
             </div>
           </div>

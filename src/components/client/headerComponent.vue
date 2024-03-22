@@ -62,7 +62,7 @@
                   >English</a
                 >
               </li>
-              <li>
+              <!-- <li>
                 <select
                   name=""
                   id=""
@@ -77,7 +77,7 @@
                   <option value="">USA</option>
                   <option value="">EG</option>
                 </select>
-              </li>
+              </li> -->
               <li class="nav-item kEkINZ">
                 <div
                   data-testid="country-switcher"

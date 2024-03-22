@@ -62,6 +62,12 @@
                     <span class="mx-3"> يبعد 10 كم </span>
                   </span>
                 </div>
+
+                <!-- status  -->
+                <div class="status">
+                  <span class="icon open"></span>
+                  <span>مفتوح</span>
+                </div>
               </div>
             </router-link>
           </div>
@@ -91,6 +97,12 @@
                     <i class="fa-solid fa-location-dot"></i>
                     <span class="mx-3"> يبعد 10 كم </span>
                   </span>
+                </div>
+
+                <!-- status  -->
+                <div class="status">
+                  <span class="icon open"></span>
+                  <span>مفتوح</span>
                 </div>
               </div>
             </router-link>
@@ -122,6 +134,12 @@
                     <span class="mx-3"> يبعد 10 كم </span>
                   </span>
                 </div>
+
+                <!-- status  -->
+                <div class="status">
+                  <span class="icon closed"></span>
+                  <span>مغلق</span>
+                </div>
               </div>
             </router-link>
           </div>
@@ -131,7 +149,7 @@
       <!-- اشهر المتاجر  -->
       <div class="bestSell mt-5">
         <h5 class="fw-bold mainColor text-end">اشهر المتاجر</h5>
-       <div class="row mt-4">
+        <div class="row mt-4">
           <div class="col-md-4 mb-3">
             <router-link to="/market/1" class="normal_link">
               <div class="single_market flex_center flex-column">
@@ -241,7 +259,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .market-item {
   display: block;
   width: 170px;
@@ -261,11 +279,40 @@ export default {
   top: 40%;
 }
 .single_market {
+  position: relative;
   border: 1px solid #ccc;
   border-radius: 15px;
   padding: 10px;
   box-shadow: 0px 0px 10px #33333325;
   transition: 0.3s all;
+  .discount {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    background-color: red;
+    color: #fff;
+    text-align: center;
+    width: 58px;
+    padding: 6px 0;
+    border-radius: 3px;
+  }
+  .status {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    .icon {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      &.open {
+        background-color: green;
+      }
+      &.closed {
+        background-color: red;
+      }
+    }
+  }
   &:hover {
     box-shadow: 0px 0px 15px #33333346;
     transform: translate(-5px, -5px);
