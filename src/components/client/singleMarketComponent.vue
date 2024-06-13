@@ -2,30 +2,30 @@
   <div class="pt-5 pb-5">
     <section class="market">
       <div class="container">
-        <div class="market_info pt-5 pb-4 position-relative">
+        <div class="market_info pt-5 pb-4 position-relative" :style="{ backgroundImage: `url(${store.cover})` }">
           <div class="market_details">
             <div class="market_image">
-              <img src="@/assets/imgs/coffee1.webp" alt="" />
+              <img :src="store.logo" alt="" />
             </div>
 
             <div class="mt-4">
-              <h5 class="fs-3 market_name fw-bold text-center">Bolivard</h5>
+              <h5 class="fs-3 market_name fw-bold text-center">{{ store.name }}</h5>
             </div>
 
             <div>
-              <p class="fs-6 fs-6 text-center whiteColor">coffee , cake</p>
+              <p class="fs-6 fs-6 text-center whiteColor"> {{ store.categories }} </p>
             </div>
 
             <div class="mt-4 mb-4">
-              <router-link to="/menu/1" class="main_btn px-5 fw-6 fs-5">
+              <router-link :to="'/menu/'+store.id" class="main_btn px-5 fw-6 fs-5">
                 اطلع على قائمة المتجر
               </router-link>
             </div>
 
-            <div class="discount-sign">
+            <div class="discount-sign" v-if="discount.has_discount==true">
               <i class="fa-solid fa-tags"></i>
               <span>
-                احصل على خصم 20 % على كل عملية شراء باكثر من 500 ريال
+                احصل على خصم {{ discount.discount_percentage }} % على كل عملية شراء باكثر من {{ discount.order_selling }} ريال
               </span>
             </div>
 
@@ -36,12 +36,10 @@
 
           <div class="market_breif mt-4">
             <h5 class="text-end fw-bold" style="color: #ffc800">
-              نبذه عن Bolivard
+              نبذه عن {{  store.name  }}
             </h5>
             <p class="text-end fs-6 fs-6">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia,
-              quo. Illum quaerat veniam voluptate, odit adipisci ipsa architecto
-              sunt iste!
+              {{  store.description  }}
             </p>
           </div>
         </div>
@@ -50,36 +48,36 @@
           <h5 class="mainColor fs-4 text-end">الاكثر مبيعا</h5>
 
           <section class="row mt-4">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-3 mb-3" v-for="item in best_products" :key="item.id">
               <div class="single_branch">
                 <div class="flex_center flex-column">
                   <div class="single_image mb-3">
-                    <img src="@/assets/imgs/cake.jpg" alt="" />
+                    <img :src="item.image" alt="" />
                   </div>
-                  <h5 class="fw-bold">Espresso</h5>
+                  <h5 class="fw-bold"> {{ item.name }} </h5>
 
-                  <button class="btn main_btn px-4">اطلب الان</button>
+                  <button class="btn main_btn px-4" @click="addToCart(item.id)">اطلب الان</button>
                 </div>
               </div>
             </div>
           </section>
         </div>
 
-        <div class="rates mt-5">
+        <div class="rates mt-5" >
           <h5 class="mainColor fs-4 text-end">اراء العملاء عن المتجر</h5>
           <h6>
-            <Rating v-model="value" readonly :cancel="false" />
-            <span class="mainColor fw-6"> (1 تقييم ) </span>
+            <Rating v-model="rate.rate" readonly :cancel="false" />
+            <span class="mainColor fw-6"> ({{  rate.count  }} تقييم ) </span>
           </h6>
 
-          <div class="singleRate">
+          <div class="singleRate" v-for="rate in rates" :key="rate.id">
             <div class="flex_between">
               <div>
-                <h6 class="secondColor">Ahmed Samir</h6>
-                <p class="fs-6 fw-6">المتجر ممتاز</p>
+                <h6 class="secondColor"> {{  rate.user_name }}</h6>
+                <p class="fs-6 fw-6">{{  rate.comment }}</p>
               </div>
               <div>
-                <span class="fs-6"> الشهر الماضي </span>
+                <span class="fs-6"> {{  rate.created_at }} </span>
               </div>
             </div>
           </div>
@@ -87,10 +85,13 @@
       </div>
     </section>
   </div>
+  <Toast />
 </template>
 
 <script>
 import Rating from "primevue/rating";
+import axios from "axios";
+import Toast from "primevue/toast";
 
 export default {
   name: "MultivendorSingleMarketComponent",
@@ -98,14 +99,64 @@ export default {
   data() {
     return {
       value: 4,
+      store: {},
+      discount: {}, 
+      rate: {},
+      best_products: [],
+      rates : []
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.getStores();
+  },
 
-  methods: {},
+  methods: {
+    async getStores() {
+      await axios.get(`user/single-store?store_id=${this.$route.params.id}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.store = res.data.data.store;
+          this.discount = res.data.data.store.discount;
+          this.rate = res.data.data.store.rate;
+          this.best_products = res.data.data.best_products;
+          this.rates = res.data.data.rates;
+      } )
+    },
+     async addToCart(id) {
+      const fd = new FormData();
+
+      await axios.post(`user/add-to-cart?product_id=${id}`,fd , {
+         headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          if (res.data.key === 'success') {
+           this.$toast.add({
+              severity: "success",
+              summary: res.data.msg,
+              life: 3000,
+           });
+            setTimeout(() => {
+              this.$router.push('/cart')
+            }, 2000);
+          } else {
+           this.$toast.add({
+              severity: "error",
+              summary: res.data.msg,
+              life: 3000,
+            });
+        }
+      } )
+    }
+  },
   components: {
     Rating,
+    Toast
   },
 };
 </script>
@@ -136,7 +187,6 @@ export default {
   color: #ffc800;
 }
 .market_info {
-  background-image: url("@/assets/imgs/coffee1.webp");
   backdrop-filter: blur(100px);
   background-repeat: no-repeat;
   background-size: cover;

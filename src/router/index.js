@@ -10,8 +10,23 @@ import login from "../views/client/loginView.vue";
 import register from "../views/client/registerView.vue";
 import completeReserve from "../views/client/completeReserve.vue";
 import offers from "../views/client/offersView.vue"
+import forgetPassword from "../views/client/forgetPassword.vue"
+import resetPassword from "../views/client/resetPassword.vue"
+import profile from '../views/client/profileView.vue'
 
 const routes = [
+  {
+    path: "/profile",
+    component: profile,
+  },
+  {
+    path: "/forgetPassword",
+    component: forgetPassword,
+  },
+  {
+    path: "/resetPassword",
+    component: resetPassword,
+  },
   {
     path: "/",
     name: "home",
@@ -54,7 +69,7 @@ const routes = [
     component: register,
   },
   {
-    path: "/completeReserve",
+    path: "/completeReserve/:id",
     component: completeReserve,
   },
   {

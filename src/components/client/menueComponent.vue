@@ -6,20 +6,20 @@
           class="card d-flex justify-content-start align-items-start flex-row pt-3 pb-3 px-4"
         >
           <div class="market-image">
-            <img src="@/assets/imgs/waffle.webp" alt="" />
+            <img :src="store.logo" alt="" />
           </div>
           <div class="market-details d-flex align-items-start flex-column mx-4">
-            <h3 class="fw-bold fs-5">Waffle Tone</h3>
+            <h3 class="fw-bold fs-5"> {{store.name }} </h3>
             <div class="location mb-2">
-              <span class="grayColor fs-6 fw-6"> جدة </span>
+              <span class="grayColor fs-6 fw-6"> {{ store.city_name }} </span>
             </div>
             <div class="category mb-2">
-              <span class="grayColor fs-6 fw-6"> coffee , cakes </span>
+              <span class="grayColor fs-6 fw-6"> {{  store.categories  }} </span>
             </div>
             <div>
               <span class="d-flex">
                 <Rating v-model="value" readonly :cancel="false" />
-                <span class="mainColor fw-6 mx-2"> 20 تقييم </span>
+                <span class="mainColor fw-6 mx-2"> {{ rate }} تقييم </span>
               </span>
             </div>
           </div>
@@ -36,7 +36,7 @@
                   <label for="" class="mainColor fw-bold d-flex fs-6 mb-2">
                     ابحث عن اسم المنتح
                   </label>
-                  <input type="text" class="form-control" placeholder="ابحث " />
+                  <input type="text" class="form-control" placeholder="ابحث " v-model="search" @input="searchProduct"/>
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
 
@@ -44,25 +44,34 @@
                   اختر حسب التصنيف
                 </label>
 
+                <div class="mt-3 d-flex align-items-start flex-column" v-for="cat in categories" :key="cat.id">
+                  <div class="form-group mb-2">
+                    <input type="checkbox" class="" v-model="catId" :value="cat.id" @change="getProducts"/>
+                    <label for="" class="fw-6 graColor fs-6 mx-2 fs-7">
+                      {{  cat.name }}
+                    </label>
+                  </div>
+                </div>  
+
+                  <label for="" class="mainColor fw-bold d-flex fs-6">
+                  اختر حسب
+                </label>
+
                 <div class="mt-3 d-flex align-items-start flex-column">
                   <div class="form-group mb-2">
-                    <input type="checkbox" class="" />
+                    <input type="checkbox" class=""   @change="getHightProducts"/>
                     <label for="" class="fw-6 graColor fs-6 mx-2 fs-7">
-                      cofee
+                     الاكثر مبيعا
                     </label>
                   </div>
+                  
                   <div class="form-group mb-2">
-                    <input type="checkbox" class="" />
+                    <input type="checkbox" class=""   @change="getHightProducts"/>
                     <label for="" class="fw-6 graColor fs-6 mx-2 fs-7">
-                      cake
+                     الاعلى تقييم
                     </label>
                   </div>
-                  <div class="form-group mb-2">
-                    <input type="checkbox" class="" />
-                    <label for="" class="fw-6 graColor fs-6 mx-2 fs-7">
-                      bakes
-                    </label>
-                  </div>
+                 
                 </div>
               </form>
             </div>
@@ -71,21 +80,20 @@
           <div class="col-md-8">
             <div class="card pt-2 pb-2 px-3">
               <Accordion :activeIndex="0">
-                <AccordionTab header="الاعلى تقييما">
-                  <div class="row">
-                    <div class="col-md-10">
+                <AccordionTab header="كل المنتجات">
+                  <div class="row" v-if="products.length>0">
+                    <div class="col-md-10" v-for="store in products" :key="store.id">
                       <div class="single_menu mb-3 flex_between">
                         <div class="prod-image">
-                          <img src="@/assets/imgs/coffee.webp" alt="" />
+                          <img :src="store.image" alt="" />
                         </div>
 
                         <div class="mx-3 d-flex align-items-start flex-column">
-                          <h6 class="fw-bold">Expresso</h6>
+                          <h6 class="fw-bold">{{ store.name }}</h6>
 
                           <div>
                             <span class="grayColor fw-6 fs-6">
-                              Lorem ipsum dolor sit amet.
-                            </span>
+{{store.description}}                            </span>
                           </div>
 
                           <div class=""></div>
@@ -94,52 +102,21 @@
                         <div
                           class="product-price d-flex flex-column align-items-end"
                         >
-                          <span class="fw-6"> 330 ر.س </span>
+                          <!-- <span class="fw-6"> 330 ر.س </span> -->
                           <button
-                            class="btn main_btn br-50 w-20 h-20 mt-3 px-0 pt-0 pb-0 addCartButton"
-                            @click="$router.push('/cart')"
+                            class="btn main_btn px-2 w-20 h-20 mt-3 px-0 pt-0 pb-0 "
+                            @click="addToCart(store.id)"
                           >
-                            +
+                            اضف للسلة
                           </button>
                         </div>
                       </div>
                     </div>
                   </div>
+
+                    <Message severity="error" v-else> لا توجد منتجات </Message>
                 </AccordionTab>
-                <AccordionTab header="الاكثر مبيعا">
-                  <div class="row">
-                    <div class="col-md-10">
-                      <div class="single_menu mb-3 flex_between">
-                        <div class="prod-image">
-                          <img src="@/assets/imgs/coffee.webp" alt="" />
-                        </div>
-
-                        <div class="mx-3 d-flex align-items-start flex-column">
-                          <h6 class="fw-bold">Expresso</h6>
-
-                          <div>
-                            <span class="grayColor fw-6 fs-6">
-                              Lorem ipsum dolor sit amet.
-                            </span>
-                          </div>
-
-                          <div class=""></div>
-                        </div>
-
-                        <div
-                          class="product-price d-flex flex-column align-items-end"
-                        >
-                          <span class="fw-6"> 330 ر.س </span>
-                          <button
-                            class="btn main_btn br-50 w-20 h-20 mt-3 px-0 pt-0 pb-0 addCartButton"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </AccordionTab>
+                
                 <!-- <AccordionTab header="Header III">
                                     <p class="m-0">
                                         At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
@@ -153,29 +130,135 @@
       </div>
     </div>
   </div>
+  <Toast />
 </template>
 
 <script>
 import Rating from "primevue/rating";
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
+import axios from "axios";
+import Message from 'primevue/message';
+import Toast from "primevue/toast";
+
 
 export default {
   name: "MultivendorMenueComponent",
 
   data() {
     return {
-      value: 3,
+      value: 0,
+      rate : '',
+      store: {},
+      high_rate_products: [],
+      high_selling_products: [],
+      products : [],
+      search: '',
+      categories: [],
+      catId : []
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.getStores();
+    this.getcats();
+  },
 
-  methods: {},
+  methods: {
+     async getStores() {
+      await axios.get(`user/store-products?store_id=${this.$route.params.id}&search=${this.search}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.store = res.data.data.store;
+          this.rate = res.data.data.store.rate.count;
+          this.value = res.data.data.store.rate.rate;
+          // this.high_selling_products = res.data.data.high_selling_products;
+          this.products = res.data.data.products;
+      } )
+    },
+     async getcats() {
+      await axios.get(`categories?store_id=${this.$route.params.id}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.categories = res.data.data;
+      } )
+    },
+    searchProduct() {
+      setTimeout(() => {
+        this.getStores();
+      }, 1000);
+    },
+    async getProducts() {
+      await axios.get(`user/store-products?store_id=${this.$route.params.id}&search=${this.search}&category_id=${this.catId}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.store = res.data.data.store;
+          this.rate = res.data.data.store.rate.count;
+          this.value = res.data.data.store.rate.rate;
+          // this.high_selling_products = res.data.data.high_selling_products;
+          this.products = res.data.data.products;
+      } )
+    },
+    
+    async getHightProducts() {
+      await axios.get(`user/store-products?store_id=${this.$route.params.id}&selling=high`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.store = res.data.data.store;
+          this.rate = res.data.data.store.rate.count;
+          this.value = res.data.data.store.rate.rate;
+          // this.high_selling_products = res.data.data.high_selling_products;
+          this.products = res.data.data.products;
+      } )
+    },
+    
+
+    async addToCart(id) {
+      const fd = new FormData();
+
+      await axios.post(`user/add-to-cart?product_id=${id}`,fd , {
+         headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          if (res.data.key === 'success') {
+           this.$toast.add({
+              severity: "success",
+              summary: res.data.msg,
+              life: 3000,
+           });
+            setTimeout(() => {
+              this.$router.push('/cart')
+            }, 2000);
+          } else {
+           this.$toast.add({
+              severity: "error",
+              summary: res.data.msg,
+              life: 3000,
+            });
+        }
+      } )
+    }
+  },
   components: {
     Rating,
     Accordion,
     AccordionTab,
+    Message,
+    Toast
   },
 };
 </script>

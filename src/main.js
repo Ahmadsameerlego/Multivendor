@@ -34,7 +34,7 @@ import VueGoogleMaps from "@fawmi/vue-google-maps";
 
 // import axios
 import axios from "axios";
-axios.defaults.baseURL = "https://backend.cvbroadcast.com/api/v1/";
+axios.defaults.baseURL = "http://coffeekies.trysnapus.com/api/";
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.lang = localStorage.getItem("locale");
@@ -60,7 +60,7 @@ createApp(App)
   .use(ToastService)
   .use(VueGoogleMaps, {
     load: {
-      key: "AIzaSyBocLD03Q46fI98jNaLr0-0xlcYRj3xhfE",
+      key: "AIzaSyBzyIm5j_8mK6y2CoOkrYA5VdZma3Sulsc",
       libraries: "places",
     },
   })

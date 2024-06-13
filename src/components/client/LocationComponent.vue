@@ -11,7 +11,7 @@
             class="form-control"
             placeholder="ابحث عن مدينة , عنوان واي ما تريد"
           />
-          <button class="btn main_btn mx-3 w-25 pt-3 pb-3">اختر موقعك</button>
+          <button class="btn main_btn mx-3 w-25 pt-3 pb-3" @click="googleMap = true">اختر موقعك</button>
           <i class="fa-solid fa-location-crosshairs"></i>
         </div>
       </div>

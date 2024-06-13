@@ -6,57 +6,26 @@
         </p>
         <div class="">
             <div class="row">
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4 mb-3" v-for="(cat, index) in categories" :key="index">
                     <Card style="pt-3">
                         <template #header>
-                            <img alt="user header" class="category-image " src="@/assets/imgs/download.jpeg" />
+                            <img v-if="cat.image!==''" alt="user header" class="category-image " :src="cat.image" />
+                            <img v-else alt="user header" class="category-image " :src="require('@/assets/imgs/logo.png')" />
                         </template>
-                        <template #title>مخبوزات</template>
+                        <template #title>{{cat.name}}</template>
                         <template #content>
                             <p class="m-0">
-اكتشف عالم المخبوزات، حيث تتلاقى النكهات والروائح لتخلق تجربة لا تُنسى. في عالم المخبوزات، تجد الدفء والراحة                            </p>
+                                {{  cat.description  }}
+                                </p>
                         </template>
                         <template #footer>
                             <div class="flex gap-3 mt-1">
-                                <button class="main_btn px-5"> اكتشف </button>
+                                <router-link to="/markets" class="main_btn px-5"> اكتشف </router-link>
                             </div>
                         </template>
                     </Card>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <Card style="pt-3">
-                        <template #header>
-                            <img alt="user header" class="category-image" src="@/assets/imgs/coffee1.webp" />
-                        </template>
-                        <template #title>قهوة</template>
-                        <template #content>
-                            <p class="m-0">
-استمتع بلحظة من السحر مع كل رشفة قهوة تشتريها، حيث تتسلل رائحة البن المحمص وتنعشك بنكهتها الغنية                            </p>
-                        </template>
-                        <template #footer>
-                            <div class="flex gap-3 mt-1">
-                                <button class="main_btn px-5"> اكتشف </button>
-                            </div>
-                        </template>
-                    </Card>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <Card style="pt-3">
-                        <template #header>
-                            <img alt="user header" class="category-image" src="@/assets/imgs/cake.jpg" />
-                        </template>
-                        <template #title>كيك</template>
-                        <template #content>
-                            <p class="m-0">
-استمتع بلذة الكيك، فهو ليس مجرد حلوى، بل هو قطعة فنية من الطهي تجمع بين النكهات الغنية والقوام الهش                            </p>
-                        </template>
-                        <template #footer>
-                            <div class="flex gap-3 mt-1">
-                                <button class="main_btn px-5"> اكتشف </button>
-                            </div>
-                        </template>
-                    </Card>
-                </div>
+                
             </div>     
         </div>
     </div>
@@ -74,7 +43,9 @@ export default {
             
         };
     },
-
+    props: {
+        categories : Array  
+    },
     mounted() {
         
     },

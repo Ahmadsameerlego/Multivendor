@@ -15,14 +15,15 @@
         </span>
       </div> -->
 
-      <form>
+      <form ref="loginForm" @submit.prevent="login">
         <div class="form-group mb-3 flex-column d-flex align-items-start">
-          <label for=""> رقم الجوال </label>
-          <InputNumber
-            v-model="value2"
+          <label for=""> رقم الجوال او الايميل  </label>
+          <InputText
+            v-model="phone_email"
             inputId="withoutgrouping"
             :useGrouping="false"
-            placeholder="يرجى ادخال رقم الجوال"
+            placeholder="يرجى ادخال رقم الجوال او الايميل"
+            
           />
           <div class="country_code">
             <Dropdown
@@ -39,12 +40,18 @@
         >
           <label for=""> كملة المرور </label>
           <Password
-            v-model="value"
+            v-model="password"
             :feedback="false"
             class=""
             toggleMask
             placeholder="يرجى ادخال كملة المرور هنا"
           />
+        </div>
+
+        <div class="d-flex justify-content-end align-items-end mt-3">
+          <router-link to="/forgetPassword" class="fs-16">
+              هل نسيت كلمة المرور ؟ 
+          </router-link>
         </div>
 
         <!-- <div class="flex_end mt-3 mb-4">
@@ -54,8 +61,10 @@
         </div> -->
 
         <div class="flex_center mb-4 mt-4">
-          <button class="pt-3 br-5 pb-3 px-5 main_btn btn w-100">
-            تسجيل الدخول
+          <button class="pt-3 br-5 pb-3 px-5 main_btn btn w-100" :disabled="disabled">
+            <span v-if="!disabled">تسجيل الدخول</span>
+                          <ProgressSpinner v-if="disabled" />
+
           </button>
         </div>
 
@@ -78,18 +87,83 @@
     <span class="top_left_circle circle"></span>
     <span class="bottom_right_circle circle"></span>
   </section>
+  <Toast />
 </template>
 
 <script>
 import Password from "primevue/password";
-import InputNumber from "primevue/inputnumber";
+import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
+import ProgressSpinner from 'primevue/progressspinner';
+import axios from 'axios';
+import Toast from 'primevue/toast';
 
 export default {
+   data() {
+    return {
+      countries: [],
+      disabled: false,
+      password: '',
+      phone_email : ''
+    };
+  },
+
+  mounted() {
+    this.getCountries()
+    
+    fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => localStorage.setItem('device_id', data.ip))
+    .catch(error => console.error(error));
+  },
+
+  methods: {
+    // get countries 
+    async getCountries() {
+      await axios.get('countries')
+        .then((res) => {
+        this.countries = res.data.data
+      } )
+    },
+
+    // login 
+    async login() {
+      this.disabled = true;
+      const fd = new FormData()
+      fd.append('phone_email', this.phone_email)
+      fd.append('password', this.password)
+      fd.append('device_type', 'web')
+      fd.append('device_id', localStorage.getItem('device_id'))
+
+      await axios.post('user/login', fd, {
+        headers: {
+          lang : 'ar'
+        }
+      })
+        .then((res) => {
+          if (res.data.key == 'success') {
+            this.$toast.add({ severity: 'success', summary: res.data.msg, life: 4000 });
+            localStorage.setItem('user', JSON.stringify(res.data.data))
+            localStorage.setItem('token', res.data.data.token)
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 3000);
+          } else {
+            this.$toast.add({ severity: 'error', summary: res.data.msg, life: 4000 });
+          }
+             this.disabled = false ;
+
+        }
+        )
+
+    }
+  },
   components: {
     Password,
-    InputNumber,
+    InputText,
     Dropdown,
+    ProgressSpinner,
+    Toast
   },
 };
 </script>
@@ -197,4 +271,6 @@ label {
   padding-right: 0.75rem;
   padding-left: 2.5rem;
 }
+
+
 </style>

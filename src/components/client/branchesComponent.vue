@@ -8,10 +8,10 @@
 
             <div class="container">
                 <section class="row mt-4">
-                    <div class="col-md-3 mb-3">
+                    <div class="col-md-3 mb-3" v-for="(city , index) in cities" :key="index">
                         <div class="single_branch flex_between">
                             <div class="d-flex justify-content-start flex-column align-items-start">
-                                <h5 class="fw-bold"> الدمام </h5>
+                                <h5 class="fw-bold"> {{ city.name }} </h5>
                                 <router-link to="/"> اطلع علي المزيد </router-link>
                             </div>
 
@@ -20,47 +20,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="col-md-3 mb-3">
-                        <div class="single_branch flex_between">
-                            <div class="d-flex justify-content-start flex-column align-items-start">
-                                <h5 class="fw-bold"> جدة </h5>
-                                <router-link to="/"> اطلع علي المزيد </router-link>
-                            </div>
-
-                            <div>
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <div class="single_branch flex_between">
-                            <div class="d-flex justify-content-start flex-column align-items-start">
-                                <h5 class="fw-bold"> مكة </h5>
-                                <router-link to="/"> اطلع علي المزيد </router-link>
-                            </div>
-
-                            <div>
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <div class="single_branch flex_between">
-                            <div class="d-flex justify-content-start flex-column align-items-start">
-                                <h5 class="fw-bold"> الرياض </h5>
-                                <router-link to="/"> اطلع علي المزيد </router-link>
-                            </div>
-
-                            <div>
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </div>
-                        </div>
-                    </div>  
-
-                    
                 </section>
             </div>
             
@@ -81,7 +40,9 @@ export default {
     mounted() {
         
     },
-
+    props: {
+        cities : []  
+    },
     methods: {
         
     },

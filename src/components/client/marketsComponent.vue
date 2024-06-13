@@ -11,138 +11,74 @@
             type="text"
             class="form-control"
             placeholder="ابحث عن اسم المتجر"
+            @input="searchMarket"
+            v-model="marketName"
           />
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
 
         <div class="mx-4">
-          <select name="" id="" class="form-select">
+          <select v-model="catId" id="" class="form-select" @change="getCatStores">
             <option value="" selected hidden>اختر نوع المتجر</option>
-            <option value="">كوفي</option>
-            <option value="">كيك</option>
-            <option value="">مخبوزات</option>
+            <option v-for="cat in categories" :key="cat.id" :value="cat.id"> {{ cat.name  }} </option>
           </select>
         </div>
 
         <div class="">
-          <select name="" id="" class="form-select">
+          <select v-model="cityId" id="" class="form-select" @change="getCityStores">
             <option value="" selected hidden>اختر اقرب مدينة لك</option>
-            <option value="">الرياض</option>
-            <option value="">مكة</option>
-            <option value="">جدة</option>
+            <option v-for="cat in citites" :key="cat.id" :value="cat.id"> {{ cat.name  }} </option>
+            
           </select>
         </div>
       </div>
 
       <div class="mt-5">
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <router-link to="/market/1" class="normal_link">
+        <div class="row" v-if="stores.length > 0">
+          <div class="col-md-4 mb-3" v-for="(store, index) in stores" :key="index">
+            <router-link :to="'/market/'+store.id" class="normal_link">
               <div class="single_market flex_center flex-column">
                 <div class="market_image">
-                  <img src="@/assets/imgs/coffee.webp" alt="" />
+                  <img :src="store.image" alt="" />
                 </div>
 
                 <div class="market_name mt-3">
                   <span class="fs-5 fw-bold market-item">
                     <i class="fa-solid fa-utensils"></i>
-                    <span class="mx-3"> Bolivard </span>
+                    <span class="mx-3"> {{ store.name }} </span>
                   </span>
                 </div>
 
                 <div class="market_type">
                   <span class="fs-6 fw-6 market-item">
                     <i class="fa-solid fa-layer-group"></i>
-                    <span class="mx-3"> coffee , cake </span>
+                    <span class="mx-3"> {{ store.categories }} </span>
                   </span>
                 </div>
                 <div class="market_type">
                   <span class="fs-7 fw-6 market-item">
                     <i class="fa-solid fa-location-dot"></i>
-                    <span class="mx-3"> يبعد 10 كم </span>
+                    <span class="mx-3"> {{ store.distance }} </span>
                   </span>
                 </div>
 
                 <!-- status  -->
-                <div class="status">
+                <div class="status" v-if="store.is_open == true">
                   <span class="icon open"></span>
                   <span>مفتوح</span>
                 </div>
-              </div>
-            </router-link>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <router-link to="/market/1" class="normal_link">
-              <div class="single_market flex_center flex-column">
-                <div class="market_image">
-                  <img src="@/assets/imgs/cake.jpg" alt="" />
-                </div>
-
-                <div class="market_name mt-3">
-                  <span class="fs-5 fw-bold market-item">
-                    <i class="fa-solid fa-utensils"></i>
-                    <span class="mx-3"> Bolivard </span>
-                  </span>
-                </div>
-
-                <div class="market_type">
-                  <span class="fs-6 fw-6 market-item">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span class="mx-3"> coffee , cake </span>
-                  </span>
-                </div>
-                <div class="market_type">
-                  <span class="fs-7 fw-6 market-item">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span class="mx-3"> يبعد 10 كم </span>
-                  </span>
-                </div>
-
-                <!-- status  -->
-                <div class="status">
-                  <span class="icon open"></span>
-                  <span>مفتوح</span>
-                </div>
-              </div>
-            </router-link>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <router-link to="/market/1" class="normal_link">
-              <div class="single_market flex_center flex-column">
-                <div class="market_image">
-                  <img src="@/assets/imgs/coffee1.webp" alt="" />
-                </div>
-
-                <div class="market_name mt-3">
-                  <span class="fs-5 fw-bold market-item">
-                    <i class="fa-solid fa-utensils"></i>
-                    <span class="mx-3"> Bolivard </span>
-                  </span>
-                </div>
-
-                <div class="market_type">
-                  <span class="fs-6 fw-6 market-item">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span class="mx-3"> coffee , cake </span>
-                  </span>
-                </div>
-                <div class="market_type">
-                  <span class="fs-7 fw-6 market-item">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span class="mx-3"> يبعد 10 كم </span>
-                  </span>
-                </div>
-
-                <!-- status  -->
-                <div class="status">
+                <div class="status" v-else>
                   <span class="icon closed"></span>
-                  <span>مغلق</span>
+                  <span>مغلق الان</span>
                 </div>
               </div>
             </router-link>
           </div>
+        </div>
+
+        <div v-else>
+          <Message severity="error">No Stores Avilable</Message>
+
         </div>
       </div>
 
@@ -150,91 +86,41 @@
       <div class="bestSell mt-5">
         <h5 class="fw-bold mainColor text-end">اشهر المتاجر</h5>
         <div class="row mt-4">
-          <div class="col-md-4 mb-3">
-            <router-link to="/market/1" class="normal_link">
+          <div class="col-md-4 mb-3" v-for="(store, index) in best_stores" :key="index">
+            <router-link :to="'/market/'+store.id" class="normal_link">
               <div class="single_market flex_center flex-column">
                 <div class="market_image">
-                  <img src="@/assets/imgs/coffee.webp" alt="" />
+                  <img :src="store.image" alt="" />
                 </div>
 
                 <div class="market_name mt-3">
                   <span class="fs-5 fw-bold market-item">
                     <i class="fa-solid fa-utensils"></i>
-                    <span class="mx-3"> Bolivard </span>
+                    <span class="mx-3"> {{ store.name }} </span>
                   </span>
                 </div>
 
                 <div class="market_type">
                   <span class="fs-6 fw-6 market-item">
                     <i class="fa-solid fa-layer-group"></i>
-                    <span class="mx-3"> coffee , cake </span>
+                    <span class="mx-3"> {{ store.categories }} </span>
                   </span>
                 </div>
                 <div class="market_type">
                   <span class="fs-7 fw-6 market-item">
                     <i class="fa-solid fa-location-dot"></i>
-                    <span class="mx-3"> يبعد 10 كم </span>
-                  </span>
-                </div>
-              </div>
-            </router-link>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <router-link to="/market/1" class="normal_link">
-              <div class="single_market flex_center flex-column">
-                <div class="market_image">
-                  <img src="@/assets/imgs/cake.jpg" alt="" />
-                </div>
-
-                <div class="market_name mt-3">
-                  <span class="fs-5 fw-bold market-item">
-                    <i class="fa-solid fa-utensils"></i>
-                    <span class="mx-3"> Bolivard </span>
+                    <span class="mx-3"> {{ store.distance }} </span>
                   </span>
                 </div>
 
-                <div class="market_type">
-                  <span class="fs-6 fw-6 market-item">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span class="mx-3"> coffee , cake </span>
-                  </span>
+                <!-- status  -->
+                <div class="status" v-if="store.is_open == true">
+                  <span class="icon open"></span>
+                  <span>مفتوح</span>
                 </div>
-                <div class="market_type">
-                  <span class="fs-7 fw-6 market-item">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span class="mx-3"> يبعد 10 كم </span>
-                  </span>
-                </div>
-              </div>
-            </router-link>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <router-link to="/market/1" class="normal_link">
-              <div class="single_market flex_center flex-column">
-                <div class="market_image">
-                  <img src="@/assets/imgs/coffee1.webp" alt="" />
-                </div>
-
-                <div class="market_name mt-3">
-                  <span class="fs-5 fw-bold market-item">
-                    <i class="fa-solid fa-utensils"></i>
-                    <span class="mx-3"> Bolivard </span>
-                  </span>
-                </div>
-
-                <div class="market_type">
-                  <span class="fs-6 fw-6 market-item">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span class="mx-3"> coffee , cake </span>
-                  </span>
-                </div>
-                <div class="market_type">
-                  <span class="fs-7 fw-6 market-item">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span class="mx-3"> يبعد 10 كم </span>
-                  </span>
+                <div class="status" v-else>
+                  <span class="icon closed"></span>
+                  <span>مغلق الان</span>
                 </div>
               </div>
             </router-link>
@@ -245,24 +131,106 @@
   </div>
 </template>
 
-<script>
+<script> 
+import axios from 'axios';
+import Message from 'primevue/message';
+
 export default {
   name: "MultivendorMarketsComponent",
 
   data() {
-    return {};
+    return {
+      stores: [],
+      catId: '',
+      cityId: '', 
+      best_stores: [],
+      marketName: '',
+      categories: [],
+      citites : []
+    };
   },
 
-  mounted() {},
+  mounted() {
+    this.getStores();
+    this.getCategories();
+    this.getCities();
+  },
 
-  methods: {},
+  methods: {
+    async getStores() {
+      await axios.get(`user/stores`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.stores = res.data.data.stores;
+          this.best_stores = res.data.data.best_stores;
+      } )
+    },
+    async searchMarket() {
+      await axios.get(`user/stores?search=${this.marketName}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.stores = res.data.data.stores;
+      } )
+    },
+    async getCatStores() {
+      await axios.get(`user/stores?search=${this.catId}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.stores = res.data.data.stores;
+      } )
+    },
+    async getCityStores() {
+      await axios.get(`user/stores?search=${this.cityId}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.stores = res.data.data.stores;
+      } )
+    },
+    async getCategories() {
+      await axios.get('categories')
+        .then((res) => {
+        this.categories = res.data.data
+      } )
+    },
+    async getCities() {
+      await axios.get('cities')
+        .then((res) => {
+        this.citites = res.data.data
+      } )
+    }
+
+  },
+  components: {
+    Message
+  }
 };
 </script>
 
+
+
+<style scoped>
+.fa-magnifying-glass {
+  position: absolute;
+  left: 10px;
+  top: 40%;
+}
+</style>
 <style lang="scss">
 .market-item {
   display: block;
-  width: 170px;
+  width: 210px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -273,11 +241,7 @@ export default {
     width: 200px !important;
   }
 }
-.fa-magnifying-glass {
-  position: absolute;
-  left: 10px;
-  top: 40%;
-}
+
 .single_market {
   position: relative;
   border: 1px solid #ccc;

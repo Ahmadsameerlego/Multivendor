@@ -11,63 +11,70 @@
       />
     </div>
 
-    <form @submit.prevent="sendCode" class="mt-5">
-      <h6 class="text-center fs-20 mb-4">
-        ادخل رمز التفعيل المرسل لك عبر الجوال
-      </h6>
-      <div class="form-group position-relative">
-        <!-- otp  -->
-        <div class="position-relative flex-auto">
-          <div
-            style="
-              display: flex;
-              flex-direction: row;
-              justify-content: space-evenly;
-            "
-          >
-            <v-otp-input
-              ref="otpInput"
-              v-model:value="code"
-              name="code"
-              input-classes="otp-input"
-              separator=""
-              :num-inputs="6"
-              :should-auto-focus="true"
-              autofocus
-              input-type="letter-numeric"
-              style="flex-direction: row-reverse"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-3 mb-3 flex_between">
-        <div class="resend" v-if="!isCodeSent">
-          <span
-            class="cursor-pointer main_color fs-18"
-            @click.prevent="resendOtp"
-          >
-            إعادة إرسال الرمز
-          </span>
-        </div>
-        <div class="time" v-if="isCodeSent">
-          <span class="counter main_color fs-17">
-            سيتم إعادة ارسال الكود في{{ timer }} ثانية
-          </span>
-        </div>
-      </div>
-
-      <div class="flex_between mt-4">
-        <button class="main_btn btn pt-3 pb-3 w-50" @click.prevent="sendCode">
-          تأكيد
-        </button>
-        <button
-          class="border_btn btn pt-3 pb-3 w-50 mx-2 btn-danger"
-          type="button"
-          @click="closeOtp"
+     <form
+      ref="loginForm"
+      @submit.prevent="sendOtp"
+      class="flex flex-wrap gap-3 p-fluid"
+    >
+      <!-- otp  -->
+      <div class="position-relative flex-auto">
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+          "
         >
-          الرجوع
+          <v-otp-input
+            ref="otpInput"
+            v-model:value="code"
+            name="code"
+            input-classes="otp-input"
+            separator=""
+            :num-inputs="4"
+            :should-auto-focus="true"
+            autofocus
+            input-type="letter-numeric"
+            style="flex-direction: row-reverse"
+          />
+        </div>
+      </div>
+
+      <!-- submit  -->
+      <div class="mt-4">
+        <button
+          class="main_btn pt-3 pb-3 fs-5 w-75 mx-auto flex_center"
+          :disabled="disabled"
+        >
+          <span v-if="!spinner">تاكيد </span>
+          <div class="spinner-border mx-2" role="status" v-if="spinner">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </button>
+      </div>
+
+      <div class="flex_between w-75 mx-auto d-flex">
+        <div class="flex_center newAcc">
+          <p class="fs-6 mt-4 fw-6" style="color: #15364d !important">
+            لم يتم الارسال ؟
+            <button
+              type="button"
+              class="fw-bold btn p-0"
+              @click.prevent="resendCode"
+              :disabled="isCodeSent"
+            >
+              اعادة ارسال
+            </button>
+          </p>
+        </div>
+
+        <div v-if="resendTime">
+          <p v-if="timer > 0" class="text-center mt-3">
+            متبقي<span class="" style="color: #15364d !important"
+              >{{ timer }}ثانية</span
+            >
+          </p>
+        </div>
       </div>
     </form>
   </section>
@@ -75,135 +82,145 @@
 </template>
 
 <script>
-import { ref, onBeforeMount, watch } from "vue";
-import { useStore } from "vuex";
-import { useToast } from "primevue/usetoast";
+import axios from "axios";
 import Toast from "primevue/toast";
 
+// import { mapState } from 'vuex';
 export default {
-  setup(props, context) {
-    const store = useStore();
-    const code = ref("");
-    const disabled = ref(true);
-    const loader = ref(false);
-    const timer = ref(60);
-    const isCodeSent = ref(true);
-    const intervalId = ref(null);
-
-    const toast = useToast();
-
-    // ================= watchers =================
-    watch(code, () => {
-      if (code.value.length == 6) {
-        disabled.value = false;
-      } else {
-        disabled.value = true;
-      }
-    });
-
-    // ================= methods ==========================
-    const startTimer = () => {
-      isCodeSent.value = true;
-      intervalId.value = setInterval(() => {
-        if (timer.value > 0) {
-          timer.value--;
-        } else {
-          clearInterval(intervalId.value);
-          disabled.value = false;
-          isCodeSent.value = false;
-        }
-      }, 1000);
-    };
-
-    const closeOtp = () => {
-      context.emit("closeOtpModal", false);
-    };
-
-    // main active otp
-    const sendCode = async () => {
-      const fd = new FormData();
-      fd.append("code", code.value);
-      fd.append("entity_id", localStorage.getItem("entity_id"));
-
-      try {
-        const response = await store.dispatch("auth/sendCode", fd);
-        if (response.success == true) {
-          toast.add({
-            severity: "success",
-            summary: response.message,
-            life: 3000,
-          });
-          // close otp modal
-          setTimeout(() => {
-            context.emit("closeOtpModal", false);
-            context.emit("responsibleData", true);
-            localStorage.setItem("responsibleDataDone", true);
-          }, 1000);
-
-          // save id of entity
-          localStorage.setItem("entity_id", response.entity_id);
-        } else {
-          toast.add({
-            severity: "errpr",
-            summary: response.message,
-            life: 3000,
-          });
-        }
-      } catch (error) {
-        toast.add({ severity: "errpr", summary: error, life: 3000 });
-      }
-    };
-
-    // main resend
-    const resendOtp = async () => {
-      const fd = new FormData();
-      fd.append("entity_id", localStorage.getItem("entity_id"));
-
-      try {
-        const response = await store.dispatch("auth/resendCode", fd);
-        if (response.success == true) {
-          toast.add({
-            severity: "success",
-            summary: response.message,
-            life: 3000,
-          });
-          setTimeout(() => {
-            timer.value = 60;
-            startTimer();
-          }, 1000);
-        } else {
-          toast.add({
-            severity: "error",
-            summary: response.message,
-            life: 3000,
-          });
-        }
-      } catch (error) {
-        toast.add({ severity: "error", summary: error, life: 3000 });
-      }
-    };
-    // ================= mounted ==========================
-
-    onBeforeMount(() => {
-      startTimer();
-    });
-
+  data() {
     return {
-      code,
-      disabled,
-      loader,
-      timer,
-      intervalId,
-      startTimer,
-      closeOtp,
-      sendCode,
-      isCodeSent,
-      resendOtp,
+      otp: false,
+      timer: 60,
+      intervalId: null,
+      openReset: false,
+      disabled: true,
+      spinner: false,
+      code: "",
+      isCodeSent: false,
+      resendTime: false,
+      parentPhone : false ,
+      methodName: "",
+      otpType: "",
     };
   },
-
   components: {
+    // resetPass ,
     Toast,
+  },
+  watch: {
+    openOtp() {
+      this.otp = true;
+    },
+    code() {
+      if (this.code.length ==4) {
+        this.disabled = false;
+      }
+    },
+  },
+  // computed:{
+  //     ...mapState(["auth"])
+  // },
+  methods: {
+    startTimer() {
+      this.intervalId = setInterval(() => {
+        if (this.timer > 0) {
+          this.timer--;
+        } else {
+          clearInterval(this.intervalId);
+          this.isCodeSent = false;
+        }
+      }, 1000);
+    },
+    // submit otp form
+    async sendOtp() {
+      this.disabled = true;
+      this.spinner = true;
+      const fd = new FormData();
+      fd.append("phone", sessionStorage.getItem("phone"));
+      fd.append("country_key", sessionStorage.getItem("country_key"));
+      fd.append("device_id", sessionStorage.getItem("device_id"));
+      fd.append("device_type", "web");
+      fd.append("code", this.code);
+
+      // check if the function for the active code or check forget password code
+      if (localStorage.getItem("otpType") == "active") {
+        this.methodName = "auth/active";
+      } else if (localStorage.getItem("otpType") == "forget") {
+        this.methodName = "auth/forgetCode";
+      }
+
+      try {
+        await axios.post("user/activate", fd).then((res) => {
+          if (res.data.key == "success") {
+            this.$toast.add({
+              severity: "success",
+              summary: res.data.msg,
+              life: 3000,
+            });
+            this.disabled = false;
+            this.spinner = false;
+            localStorage.setItem('user' , JSON.stringify(res.data.data))
+              localStorage.setItem('token', res.data.data.token)
+            
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 2000);
+          } else {
+            this.$toast.add({
+              severity: "error",
+              summary: res.data.msg,
+              life: 3000,
+            });
+            this.disabled = false;
+            this.spinner = false;
+          }
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    // resend code
+    async resendCode() {
+      try {
+         const fd = new FormData();
+      fd.append("phone", sessionStorage.getItem("phone"));
+      fd.append("country_key", sessionStorage.getItem("country_key"));
+        await axios
+          .post(`user/activate/resend-code`, fd)
+          .then((res) => {
+            if (res.data.key == "success") {
+              this.$toast.add({
+                severity: "success",
+                summary: res.data.msg,
+                life: 3000,
+              });
+              this.startTimer();
+              this.timer = 60;
+              this.isCodeSent = true;
+              this.resendTime = true;
+            } else {
+              this.$toast.add({
+                severity: "error",
+                summary: res.data.msg,
+                life: 3000,
+              });
+            }
+          });
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  },
+  
+  beforeUnmount() {
+    clearInterval(this.intervalId);
+  },
+  mounted() {
+    // this.startTimer();
+    fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => localStorage.setItem('device_id', data.ip))
+    .catch(error => console.error(error));
   },
 };
 </script>
@@ -211,8 +228,9 @@ export default {
 <style lang="scss">
 #otp {
   .otp_gif {
-    width: 220px;
-    height: 207px;
+       width: 110px;
+    height: 113px;
+
   }
 }
 

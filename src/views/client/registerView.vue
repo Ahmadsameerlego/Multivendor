@@ -15,35 +15,45 @@
         </span>
       </div> -->
 
-      <form>
+      <form @submit.prevent="login">
         <div class="row">
           <div class="col-md-6 mb-3">
             <div class="form-group mb-3 flex-column d-flex align-items-start">
-              <label for=""> اسم المستخدم </label>
+              <label for=""> الاسم الاول </label>
               <InputText
-                v-model="value2"
+                v-model="first_name"
                 inputId="withoutgrouping"
                 :useGrouping="false"
-                placeholder="يرجى ادخال اسم المستخدم"
+                placeholder="يرجى ادخال الاسم الاول"
+              />
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group mb-3 flex-column d-flex align-items-start">
+              <label for=""> الاسم الاخير </label>
+              <InputText
+                v-model="last_name"
+                inputId="withoutgrouping"
+                :useGrouping="false"
+                placeholder="يرجى ادخال الاسم الاخير"
               />
             </div>
           </div>
 
           <div class="col-md-6 mb-3">
-            <div class="form-group mb-3 flex-column d-flex align-items-start">
+            <div class="form-group mb-3 flex-column d-flex align-items-start position-relative">
               <label for=""> رقم الجوال </label>
-              <InputNumber
-                v-model="value2"
+              <InputText
+                v-model="phone"
                 inputId="withoutgrouping"
                 :useGrouping="false"
                 placeholder="يرجى ادخال رقم الجوال"
               />
               <div class="country_code">
                 <Dropdown
-                  v-model="selectedCity"
-                  :options="cities"
-                  optionLabel="name"
-                  placeholder="Select a City"
+                  v-model="selectedCountry"
+                  :options="countries"
+                  optionLabel="code"
                   class="w-full md:w-14rem"
                 />
               </div>
@@ -52,29 +62,17 @@
 
           <div class="col-md-6 mb-3">
             <div class="form-group mb-3 flex-column d-flex align-items-start">
-              <label for=""> اختر المدينة </label>
-              <Dropdown
-                v-model="selectedCity"
-                :options="cities"
-                optionLabel="name"
-                placeholder="Select a City"
-                class=""
-                style="width: 93%"
+              <label for=""> البريد الالكتروني </label>
+              <InputText
+                v-model="email"
+                inputId="withoutgrouping"
+                :useGrouping="false"
+                placeholder="يرجى ادخال البريد الالكتروني"
               />
             </div>
           </div>
 
-          <div class="col-md-6 mb-3">
-            <div class="form-group mb-3 flex-column d-flex align-items-start">
-              <label for=""> حدد موقعك </label>
-              <InputText
-                v-model="value2"
-                inputId="withoutgrouping"
-                :useGrouping="false"
-                placeholder="يرجى  تحديد موقعك"
-              />
-            </div>
-          </div>
+        
 
           <div class="col-md-6 mb-3">
             <div
@@ -82,33 +80,22 @@
             >
               <label for=""> كملة المرور </label>
               <Password
-                v-model="value"
-                :feedback="false"
+                v-model="password"
+                :feedback="true"
                 class=""
                 toggleMask
                 placeholder="يرجى ادخال كملة المرور هنا"
               />
             </div>
           </div>
-          <div class="col-md-6 mb-3">
-            <div
-              class="form-group position-relative flex-column d-flex align-items-start mb-3"
-            >
-              <label for=""> تأكيد كلمة المرور </label>
-              <Password
-                v-model="value"
-                :feedback="false"
-                class=""
-                toggleMask
-                placeholder="يرجى ادخال كملة المرور هنا"
-              />
-            </div>
-          </div>
+
         </div>
 
         <div class="flex_center mb-4">
-          <button class="pt-3 br-5 pb-3 px-5 main_btn btn w-25" @click.prevent="otp=true">
-            تسجيل جديد
+          <button class="pt-3 br-5 pb-3 px-5 main_btn btn w-25" :disabled="disabled" >
+            <span v-if="!disabled">تسجيل جديد</span>
+            <ProgressSpinner v-if="disabled" />
+
           </button>
         </div>
 
@@ -134,40 +121,127 @@
   <Dialog
     v-model:visible="otp"
     modal
-    :style="{ width: '34rem' }"
+    :style="{ width: '40rem' }"
     :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
   >
-    <activeCode @closeOtpModal="otp = false" @responsibleData="saveResponsible" />
+    <activeCode @closeOtpModal="otp = false" @responsibleData="saveResponsible"   />
   </Dialog>
+  <Toast />
 </template>
 
 <script>
 import Password from "primevue/password";
-import InputNumber from "primevue/inputnumber";
 import Dropdown from "primevue/dropdown";
 import InputText from "primevue/inputtext";
 
 import activeCode from "@/components/client/otpActive.vue";
 
 import Dialog from 'primevue/dialog';
+
+import ProgressSpinner from 'primevue/progressspinner';
+import axios from 'axios';
+import Toast from 'primevue/toast';
+
 export default {
     data() {
         return{
-        otp : false
+          otp: false,
+                countries: [],
+          disabled: false,
+          selectedCountry: null,
+          phone: '',
+          email: '',
+          first_name: '',
+          last_name: '',
+          password : ''
         }      
-    },  
+  },  
+   methods: {
+    // get countries 
+    async getCountries() {
+      await axios.get('countries')
+        .then((res) => {
+        this.countries = res.data.data
+      } )
+    },
+
+    // login 
+    async login() {
+      this.disabled = true;
+      const fd = new FormData()
+      fd.append('first_name', this.first_name)
+      fd.append('last_name', this.last_name)
+      fd.append('phone', this.phone)
+      fd.append('email', this.email)
+      fd.append('password', this.password)
+      if (this.selectedCountry) {
+                fd.append('country_key', this.selectedCountry.code)
+        
+      }
+      fd.append('device_type', 'web')
+      fd.append('device_id', localStorage.getItem('device_id'))
+
+      await axios.post('user/register', fd, {
+        headers: {
+          lang : 'ar'
+        }
+      })
+        .then((res) => {
+          if (res.data.key == 'success') {
+            this.$toast.add({ severity: 'success', summary: res.data.msg, life: 4000 });
+            localStorage.setItem('user', JSON.stringify(res.data.data))
+            localStorage.setItem('token', res.data.data.token)
+            sessionStorage.setItem('phone', this.phone)
+            sessionStorage.setItem('country_key', this.selectedCountry.code)
+            setTimeout(() => {
+              this.otp = true;
+            }, 2000);
+          } else {
+            this.$toast.add({ severity: 'error', summary: res.data.msg, life: 4000 });
+          }
+             this.disabled = false ;
+
+        }
+        )
+
+    }
+  },
+   mounted() {
+    this.getCountries()
+    
+    fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => localStorage.setItem('device_id', data.ip))
+    .catch(error => console.error(error));
+  },
+
   components: {
     Password,
-    InputNumber,
     Dropdown,
     InputText,
     activeCode,
-    Dialog
+    Dialog,
+    ProgressSpinner,
+    Toast
   },
 };
 </script>
 
+
+<style>
+.p-dropdown-panel .p-dropdown-items{padding: 0 !important;}
+</style>
 <style scoped>
+:deep(.p-dropdown-panel .p-dropdown-items){padding: 0 !important;}
+:deep(.p-dropdown.p-component.p-inputwrapper){
+      background: #f6f6f6 !important;
+}
+:deep(.country_code .p-dropdown) {
+    position: absolute;
+    left: 33px;
+    top: 33px;
+    width: 108px;
+}
 .login_form {
   width: 69% !important;
   margin: auto;

@@ -3,7 +3,7 @@
     <div class="header">
       <div class="container px-m-0 mobile-header">
         <div
-          class="nav-bar navbar-expand-sm d-flex justify-content-between align-items-center"
+          class="nav-bar navbar-expand-sm d-flex justify-content-between align-items-baseline"
         >
           <router-link to="/" class="decoration-none">
             <div class="logo">
@@ -62,22 +62,25 @@
                   >English</a
                 >
               </li>
-              <!-- <li>
-                <select
-                  name=""
-                  id=""
-                  style="
-                    background-color: transparent;
-                    border: none;
-                    color: #fff;
-                  "
+
+               <li class="nav-item kEkINZ d-sm-block px-2" v-if="isAuthed">
+                <router-link
+                  to="/cart"
+                  class="cart"
+                  >
+                  <i class="fa-solid fa-cart-shopping"></i>
+                  </router-link
                 >
-                  <option value="">اختر العملة</option>
-                  <option value="">SAR</option>
-                  <option value="">USA</option>
-                  <option value="">EG</option>
-                </select>
-              </li> -->
+              </li>
+               <li class="nav-item kEkINZ d-sm-block px-2" v-if="isAuthed">
+                <router-link
+                  to="/cart"
+                  class="cart"
+                  >
+<i class="fa-solid fa-bell"></i>                  </router-link
+                >
+              </li>
+              
               <li class="nav-item kEkINZ">
                 <div
                   data-testid="country-switcher"
@@ -94,76 +97,80 @@
                   </div>
                 </div>
               </li>
-              <li class="kEkINZ pa-m-0 px-2">
-                <button
+              <li class="kEkINZ pa-m-0 px-2" v-if="!isAuthed">
+                <router-link
+                  to="/login"
                   type="button"
                   class="btn btn-login f-m-14 pa-m-10"
                   data-testid="login"
                 >
                   تسجيل الدخول
+                </router-link>
+              </li>
+               <div class="dropdown profile br-5" v-if="isAuthed">
+            <button
+              class="btn dropdown-toggle px-4 br-5 pt-2 pb-2 main_btn"
+              type="button"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <img
+                :src="
+                  image
+                "
+                class="mx-2 imoji"
+                width="30"
+                height="30"
+                alt=""
+              />
+              <span class="name">اهلا {{ username }}</span>
+
+              <!-- <i class="fa-regular fa-user user_profile"></i> -->
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li class="mb-3">
+                <router-link
+                  class="dropdown-item d-flex justify-content-start align-items-center"
+                  to="/profile"
+                >
+                  <span class="profile_icon flex_center">
+                    <i class="fa-solid fa-user-pen"></i>
+                  </span>
+                  <span class="mx-2 fw-6"> الملف الشخصي </span>
+                </router-link>
+              </li>
+
+              <li class="mb-3">
+                <router-link
+                  class="dropdown-item d-flex justify-content-start align-items-center"
+                  to="/orders"
+                >
+                  <span class="profile_icon flex_center">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                  </span>
+                  <span class="mx-2 fw-6"> طلباتك </span>
+                </router-link>
+              </li>
+
+              <li class="mb-3">
+                <button
+                  class="dropdown-item d-flex justify-content-start align-items-center"
+                  @click.prevent="signOut"
+                >
+                  <span class="profile_icon logout flex_center">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                  </span>
+                  <span class="mx-2 fw-6"> تسجيل الخروج </span>
                 </button>
               </li>
             </ul>
-
-            <ul class="navbar-nav px-m-8 d-flex d-sm-none mobile-menu">
-              <li class="kEkINZ pa-m-0 home-li">
-                <a
-                  rel="noreferrer"
-                  href="#"
-                  class="jYUbJg pa-m-2 f-m-14 d-block d-sm-none"
-                  >الصفحة الرئيسية</a
-                >
-              </li>
-              <li class="kEkINZ pa-m-0 login-li">
-                <a rel="noreferrer" class="jYUbJg pa-m-2 f-m-14"
-                  >تسجيل الدخول</a
-                >
-              </li>
-              <li class="kEkINZ pa-m-0 contact-li d-block d-sm-none">
-                <a rel="noreferrer" href="#" class="jYUbJg pa-m-2 f-m-14"
-                  >إتصل بنا</a
-                >
-              </li>
-              <li class="kEkINZ pa-m-0">
-                <div>
-                  <a
-                    rel="noreferrer"
-                    href="#"
-                    data-testid="restaurants"
-                    class="jYUbJg pa-m-2 f-m-14"
-                    >جميع المطاعم</a
-                  >
                 </div>
-              </li>
-              <li class="kEkINZ pa-m-0 become-partner-li">
-                <div>
-                  <a
-                    rel="noreferrer"
-                    href="https://eg.partner.talabat.com/s/?language=ar"
-                    target="_blank"
-                    class="jYUbJg pa-m-2 f-m-14"
-                    >انضم كشريك</a
-                  >
-                </div>
-              </li>
-              <li class="kEkINZ pa-m-0 offers-li">
-                <a
-                  href="/ar/egypt/donations"
-                  class="jYUbJg pa-m-2 f-m-14"
-                  data-testid="donations"
-                  >التبرعات</a
-                >
-              </li>
-              <li class="kEkINZ pa-m-0 offers-li">
-                <a
-                  rel="noreferrer"
-                  href="#"
-                  data-testid="offers"
-                  class="jYUbJg pa-m-2 f-m-14"
-                  >عروض المطاعم</a
-                >
-              </li>
             </ul>
+
+            <button class="btn toggleNabBtn dropdown profile " style="color:#fff" @click="toggleNav">
+              <i class="fa-solid fa-bars-staggered"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -176,12 +183,27 @@ export default {
   name: "MultivendorHeaderComponent",
 
   data() {
-    return {};
+    return {
+      isAuthed: false,
+      username: '',
+      image : ''
+    };
+  },
+  methods: {
+    toggleNav() {
+      document.querySelector('.navbar-nav').classList.toggle('active')
+    }
+  },
+  mounted() {
+    if( localStorage.getItem('token') ){
+            this.isAuthed = true ;
+        }
+        if( localStorage.getItem('user') ){
+            this.username = JSON.parse(localStorage.getItem('user')).first_name ;
+            this.image = JSON.parse(localStorage.getItem('user')).image ;
+        }
   },
 
-  mounted() {},
-
-  methods: {},
 };
 </script>
 
@@ -212,5 +234,19 @@ export default {
 .btn-login {
   color: #fff;
   border: 1px solid #fff;
+}
+
+.dropdown-menu {
+  border: none !important;
+  box-shadow: 0px 0px 10px #33333346;
+}
+.dropdown {
+  &.profile {
+    button.dropdown-toggle {
+    background-color: #734b21 !important;
+    color: #fff;
+    border: 1px solid #fff;
+    }
+  }
 }
 </style>

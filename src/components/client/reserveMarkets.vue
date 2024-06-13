@@ -1,8 +1,7 @@
 <template>
   <div class="pt-5 pb-5">
     <div class="container">
-      <h5 class="fw-bold text-center">احجز مقاعدك الان بكل سهولة</h5>
-      <p class="grayColor fw-6 fs-6">ما عليك سوا اختيار المتجر المطلوب</p>
+      <h5 class="fw-bold text-center">جميع متاجرنا</h5>
     </div>
 
     <div class="container">
@@ -12,147 +11,185 @@
             type="text"
             class="form-control"
             placeholder="ابحث عن اسم المتجر"
+            @input="searchMarket"
+            v-model="marketName"
           />
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
 
         <div class="mx-4">
-          <select name="" id="" class="form-select">
+          <select v-model="catId" id="" class="form-select" @change="getCatStores">
             <option value="" selected hidden>اختر نوع المتجر</option>
-            <option value="">كوفي</option>
-            <option value="">كيك</option>
-            <option value="">مخبوزات</option>
+            <option v-for="cat in categories" :key="cat.id" :value="cat.id"> {{ cat.name  }} </option>
           </select>
         </div>
 
         <div class="">
-          <select name="" id="" class="form-select">
+          <select v-model="cityId" id="" class="form-select" @change="getCityStores">
             <option value="" selected hidden>اختر اقرب مدينة لك</option>
-            <option value="">الرياض</option>
-            <option value="">مكة</option>
-            <option value="">جدة</option>
+            <option v-for="cat in citites" :key="cat.id" :value="cat.id"> {{ cat.name  }} </option>
+            
           </select>
         </div>
       </div>
 
       <div class="mt-5">
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <button
-              @click="chooseMarket"
-              class="normal_link btn w-100 position-relative"
-            >
+        <div class="row" v-if="stores.length > 0">
+          <div class="col-md-4 mb-3" v-for="(store, index) in stores" :key="index">
+            <router-link :to="'/completeReserve/'+store.id" class="normal_link">
               <div class="single_market flex_center flex-column">
                 <div class="market_image">
-                  <img src="@/assets/imgs/coffee.webp" alt="" />
+                  <img :src="store.image" alt="" />
                 </div>
 
                 <div class="market_name mt-3">
-                  <span class="fs-5 fw-bold"> Bolivard </span>
+                  <span class="fs-5 fw-bold market-item">
+                    <i class="fa-solid fa-utensils"></i>
+                    <span class="mx-3"> {{ store.name }} </span>
+                  </span>
                 </div>
 
                 <div class="market_type">
-                  <span class="fs-6 fw-6"> coffee , cake </span>
+                  <span class="fs-6 fw-6 market-item">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span class="mx-3"> {{ store.categories }} </span>
+                  </span>
                 </div>
-              </div>
-              <input
-                type="radio"
-                class="chooseMarketInput"
-                name="reserve"
-                value="1"
-              />
-            </button>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <button @click="chooseMarket" class="normal_link btn w-100">
-              <div class="single_market flex_center flex-column">
-                <div class="market_image">
-                  <img src="@/assets/imgs/cake.jpg" alt="" />
-                </div>
-
-                <div class="market_name mt-3">
-                  <span class="fs-5 fw-bold"> Wizzard </span>
-                </div>
-
                 <div class="market_type">
-                  <span class="fs-6 fw-6"> coffee , cake </span>
+                  <span class="fs-7 fw-6 market-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span class="mx-3"> {{ store.distance }} </span>
+                  </span>
+                </div>
+
+                <!-- status  -->
+                <div class="status" v-if="store.is_open == true">
+                  <span class="icon open"></span>
+                  <span>مفتوح</span>
+                </div>
+                <div class="status" v-else>
+                  <span class="icon closed"></span>
+                  <span>مغلق الان</span>
                 </div>
               </div>
-              <input
-                type="radio"
-                class="chooseMarketInput"
-                name="reserve"
-                value="2"
-              />
-            </button>
-          </div>
-
-          <div class="col-md-4 mb-3">
-            <button @click="chooseMarket" class="normal_link btn w-100">
-              <div class="single_market flex_center flex-column">
-                <div class="market_image">
-                  <img src="@/assets/imgs/coffee1.webp" alt="" />
-                </div>
-
-                <div class="market_name mt-3">
-                  <span class="fs-5 fw-bold"> CircleK </span>
-                </div>
-
-                <div class="market_type">
-                  <span class="fs-6 fw-6"> coffee , cake </span>
-                </div>
-              </div>
-              <input
-                type="radio"
-                class="chooseMarketInput"
-                name="reserve"
-                value="3"
-              />
-            </button>
+            </router-link>
           </div>
         </div>
 
-        <div v-if="store">
-          <router-link to="/completeReserve" class="main_btn px-5 pt-2 pb-2">تأكيد الحجز</router-link>
+        <div v-else>
+          <Message severity="error">No Stores Avilable</Message>
+
         </div>
       </div>
+
+  
     </div>
   </div>
 </template>
 
-<script>
+<script> 
+import axios from 'axios';
+import Message from 'primevue/message';
+
 export default {
   name: "MultivendorMarketsComponent",
 
   data() {
     return {
-      store: false,
+      stores: [],
+      catId: '',
+      cityId: '', 
+      best_stores: [],
+      marketName: '',
+      categories: [],
+      citites : []
     };
   },
 
-  mounted() {},
+  mounted() {
+    this.getStores();
+    this.getCategories();
+    this.getCities();
+  },
 
   methods: {
-    chooseMarket() {
-      this.store = true;
+    async getStores() {
+      await axios.get(`user/stores-reservations`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.stores = res.data.data.stores;
+          this.best_stores = res.data.data.best_stores;
+      } )
     },
+    async searchMarket() {
+      await axios.get(`user/stores-reservations?search=${this.marketName}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.stores = res.data.data.stores;
+      } )
+    },
+    async getCatStores() {
+      await axios.get(`user/stores-reservations?search=${this.catId}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.stores = res.data.data.stores;
+      } )
+    },
+    async getCityStores() {
+      await axios.get(`user/stores-reservations?search=${this.cityId}`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          this.stores = res.data.data.stores;
+      } )
+    },
+    async getCategories() {
+      await axios.get('categories')
+        .then((res) => {
+        this.categories = res.data.data
+      } )
+    },
+    async getCities() {
+      await axios.get('cities')
+        .then((res) => {
+        this.citites = res.data.data
+      } )
+    }
+
   },
+  components: {
+    Message
+  }
 };
 </script>
 
-<style lang="scss" scoped>
-.chooseMarketInput {
+
+
+<style scoped>
+.fa-magnifying-glass {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  cursor: pointer;
+  left: 10px;
+  top: 40%;
 }
-.normal_link:has(.chooseMarketInput:checked) {
-  border: 1px solid #333;
+</style>
+<style lang="scss">
+.market-item {
+  display: block;
+  width: 210px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .search_market {
   input,
@@ -160,17 +197,42 @@ export default {
     width: 200px !important;
   }
 }
-.fa-magnifying-glass {
-  position: absolute;
-  left: 10px;
-  top: 40%;
-}
+
 .single_market {
+  position: relative;
   border: 1px solid #ccc;
   border-radius: 15px;
   padding: 10px;
   box-shadow: 0px 0px 10px #33333325;
   transition: 0.3s all;
+  .discount {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    background-color: red;
+    color: #fff;
+    text-align: center;
+    width: 58px;
+    padding: 6px 0;
+    border-radius: 3px;
+  }
+  .status {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    .icon {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      &.open {
+        background-color: green;
+      }
+      &.closed {
+        background-color: red;
+      }
+    }
+  }
   &:hover {
     box-shadow: 0px 0px 15px #33333346;
     transform: translate(-5px, -5px);

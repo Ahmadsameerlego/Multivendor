@@ -18,52 +18,16 @@
                         disableOnInteraction: false,
                         }"
                 >
-                    <swiper-slide>
+                    <swiper-slide v-for="(ad, index) in ads" :key="index">
                         <div class="offer">
-                            <img src="@/assets/imgs/cake.jpg" alt="Offer Image" class="offer-image" />
-                            <div class="offer-details">
+                            <img :src="ad.image" alt="Offer Image" class="offer-image" />
+                            <!-- <div class="offer-details">
                                 <h2 class="offer-title">الكيك</h2>
                                 <p class="offer-description">خصومات علي الكيك</p>
                             </div>
                             <div class="offer_tag">
                                 23%
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="offer">
-                            <img src="@/assets/imgs/cake.jpg" alt="Offer Image" class="offer-image" />
-                            <div class="offer-details">
-                                <h2 class="offer-title">الكيك</h2>
-                                <p class="offer-description">خصومات علي الكيك</p>
-                            </div>
-                            <div class="offer_tag">
-                                23%
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="offer">
-                            <img src="@/assets/imgs/cake.jpg" alt="Offer Image" class="offer-image" />
-                            <div class="offer-details">
-                                <h2 class="offer-title">الكيك</h2>
-                                <p class="offer-description">خصومات علي الكيك</p>
-                            </div>
-                            <div class="offer_tag">
-                                23%
-                            </div>
-                        </div>
-                    </swiper-slide>
-                    <swiper-slide>
-                        <div class="offer">
-                            <img src="@/assets/imgs/cake.jpg" alt="Offer Image" class="offer-image" />
-                            <div class="offer-details">
-                                <h2 class="offer-title">الكيك</h2>
-                                <p class="offer-description">خصومات علي الكيك</p>
-                            </div>
-                            <div class="offer_tag">
-                                23%
-                            </div>
+                            </div> -->
                         </div>
                     </swiper-slide>
                 </swiper>
@@ -102,7 +66,9 @@ export default {
     mounted() {
         
     },
-
+    props: {
+      ads : Array  
+    },
     methods: {
         
     },
@@ -113,12 +79,10 @@ export default {
 .offer {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 20px;
   padding: 10px;
   position: relative;
-  padding-top: 30px;
 }
 .offer_tag{
     background-color: red;
@@ -135,9 +99,9 @@ export default {
     padding: 3px;
 }
 .offer-image {
-  width: 120px;
+  width: 100%;
   height: 100px;
-  margin-right: 20px;
+  border-radius: 10px;
 }
 
 .offer-details {

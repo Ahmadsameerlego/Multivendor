@@ -253,3 +253,46 @@ $main-color2: #6D98DB   ;
     justify-content: center;
     align-items: center;
 }
+
+.p-progress-spinner {
+    position: relative;
+    margin: 0 auto;
+    width: 100px;
+    height: 30px;
+    display: inline-block;
+    color: #fff;
+}
+.toggleNabBtn{
+    display: none;
+}
+@media(max-width:768px){
+    .language-switcher.d-sm-none.d-block{display: none !important;}
+    .nav-item{
+        margin-bottom: 20px;
+    }
+    .navbar-nav{
+                position: fixed;
+        display: flex !important;
+        width: 100%;
+        right: 0;
+        background-color: #734b21f5;
+        height: 100%;
+        z-index: 9999;
+        top: 100px;
+        transform: translateX(100%);
+        transition: 0.3s all;
+        padding: 16px 16px;
+
+    }
+    .dropdown.profile{        background-color: #734b21 !important;
+}
+    .dropdown-toggle .name{
+        display: none;
+    }
+    .navbar-nav.active{
+        transform: translateX(0%);
+    }
+    .toggleNabBtn{
+    display: block;
+}
+}

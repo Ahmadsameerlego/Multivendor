@@ -4,58 +4,41 @@
       <TabView>
         <TabPanel header="العروض">
           <!-- offers  -->
-          <div class="row">
-            <div class="col-md-6">
+          <div class="row" v-if="offers.length > 0">
+            <div class="col-md-6 mb-3" v-for="offer in offers" :key="offer.id">
               <div class="single-offer flex_between">
                 <div class="d-flex">
                   <div class="offer-img">
-                    <img :src="require('@/assets/imgs/cake.jpg')" alt="" />
+                    <img :src="offer.image" alt="" />
                   </div>
                   <div class="mx-4">
-                    <h6 class="fw-bold">cake</h6>
+                    <h6 class="fw-bold">{{ offer.name }}</h6>
                     <router-link to="/market/1" class="mb-3"
-                      >market-name</router-link
+                      >{{ offer.store_name }}</router-link
                     >
                   </div>
                 </div>
 
                 <div>
-                  <h6 class="fw-bold">100 ر.س</h6>
-                  <h6 class="price_after">200 ر.س</h6>
+                  <h6 class="fw-bold"> {{  offer.price_discount  }} ر.س</h6>
+                  <h6 class="price_after"> {{ offer.price }} ر.س </h6>
                   <div>
-                    <button class="main_btn">اضف للسلة</button>
+                    <button class="main_btn"                             @click.prevent="addToCart(offer.id)"
+>اضف للسلة</button>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="single-offer flex_between">
-                <div class="d-flex">
-                  <div class="offer-img">
-                    <img :src="require('@/assets/imgs/coffee.webp')" alt="" />
-                  </div>
-                  <div class="mx-4">
-                    <h6 class="fw-bold">coffee</h6>
-                    <router-link to="/market/1" class="mb-3"
-                      >market-name</router-link
-                    >
-                  </div>
-                </div>
-
-                <div>
-                  <h6 class="fw-bold">100 ر.س</h6>
-                  <h6 class="price_after">200 ر.س</h6>
-                  <button class="main_btn">اضف للسلة</button>
-                </div>
-              </div>
-            </div>
+            
           </div>
+                              <Message severity="error" v-else> لا توجد عروض الى الان </Message>
+
         </TabPanel>
         <TabPanel header="الخصومات">
           <div class="discounts">
             <h6 class="mb-4">احصل على خصومات فورية على اصناف مختارة</h6>
             <div class="row mt-4">
-              <div class="col-md-4 mb-3">
+              <div class="col-md-4 mb-3" v-for="dis in discounts" :key="dis.id">
                 <router-link to="/market/1" class="normal_link">
                   <div
                     class="single_market flex_center flex-column position-relative"
@@ -161,16 +144,85 @@
       </TabView>
     </div>
   </div>
+  <Toast />
 </template>
 
 <script>
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
+import Toast from "primevue/toast";
+import Message from 'primevue/message';
 
+import axios from "axios";
 export default {
+  data() {
+    return {
+      offers: [],
+        discounts : []
+      }
+  },
+  methods: {
+    async getOffers() {
+      await axios.get('user/offers', {
+         headers: {
+           lang: 'ar',
+          Authorization  : `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+        .then((res) => {
+          this.offers = res.data.data.products;
+      } )
+    },
+    async getDiscounts() {
+      await axios.get('user/stores-discounts', {
+         headers: {
+           lang: 'ar',
+          Authorization  : `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+        .then((res) => {
+          this.discounts = res.data.data.stores;
+      } )
+    },
+      async addToCart(id) {
+      const fd = new FormData();
+
+      await axios.post(`user/add-to-cart?product_id=${id}`,fd , {
+         headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+                     lang: 'ar',
+
+        }
+      })
+        .then((res) => {
+          if (res.data.key === 'success') {
+           this.$toast.add({
+              severity: "success",
+              summary: res.data.msg,
+              life: 3000,
+           });
+            setTimeout(() => {
+              this.$router.push('/cart')
+            }, 2000);
+          } else {
+           this.$toast.add({
+              severity: "error",
+              summary: res.data.msg,
+              life: 3000,
+            });
+        }
+      } )
+    }
+  },
+  mounted() {
+    this.getOffers();
+    this.getDiscounts();
+  },
   components: {
     TabView,
     TabPanel,
+    Toast,
+    Message
   },
 };
 </script>
