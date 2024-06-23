@@ -1,26 +1,26 @@
 <template>
   <div class="pt-5 pb-5">
     <div class="container">
-      <h4 class="fw-bold text-center">تأكيد الحجز</h4>
+      <h4 class="fw-bold text-center"> {{ $t('order.confirm') }} </h4>
 
       <form @submit.prevent="reserve" ref="reserveForm" class="mt-5">
         <div class="row">
           <div class="col-md-6 mb-3">
             <div class="form-group">
-              <label for="" class="text-start d-flex"> اختر المعاد </label>
+              <label for="" class="text-start d-flex"> {{ $t('order.resDate') }} </label>
               <input type="date" class="form-control" name="date" id="" />
             </div>
           </div>
           <div class="col-md-6 mb-3">
             <div class="form-group">
-              <label for="" class="text-start d-flex"> اختر التوقيت </label>
+              <label for="" class="text-start d-flex"> {{ $t('order.reTime') }} </label>
               <input type="time" class="form-control" name="time" id="" />
             </div>
           </div>
 
           <div class="col-md-6 mb-3">
             <div class="form-group">
-              <label for="" class="text-start d-flex"> حدد عدد المقاعد </label>
+              <label for="" class="text-start d-flex"> {{ $t('order.members') }} </label>
               <input type="number" class="form-control" name="members" id="" />
             </div>
           </div>
@@ -29,7 +29,7 @@
         <div>
           <button class="main_btn px-5 pt-2 pb-2" :disabled="disabled">
             <span v-if="!disabled">
-              تأكيد
+              {{ $t('cart.confirm') }}
             </span>
           <div class="spinner-border mx-2" role="status" v-if="disabled">
             <span class="visually-hidden">Loading...</span>

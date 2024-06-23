@@ -1,7 +1,7 @@
 <!-- CartShopping.vue -->
 <template>
   <div class="cart-shopping pt-5 pb-5 container">
-    <h4 class="fw-bold text-center">عربة التسوق</h4>
+    <h4 class="fw-bold text-center"> {{  $t('cart.name')  }} </h4>
     <div
       v-for="(item, itemIndex) in carts"
       :key="itemIndex"
@@ -21,7 +21,7 @@
             <!-- <p class="fw-6 fs-17">السعر: {{ item.price }} ر.س</p> -->  
 
             <p class="fw-bold fs-19" >
-              اجمالي المنتج:{{ item.price* item.qty }} ر.س
+              {{  $t('cart.prodTotal')  }}:{{ item.price* item.qty }} ر.س
             </p>
           </div>
         </div>
@@ -37,24 +37,27 @@
       </div>
 
       <div class="button-list d-flex flex-column mx-3">
-        <h5 class="font-bold mainColor">اختر الاحجام</h5>
+        <h5 class="font-bold mainColor"> {{ $t('cart.chooseSize') }} </h5>
         <button
           v-for="(button, index) in item.sizes"
           :key="index"
-          @click="increasePrice(button.price, itemIndex, button.id)"
+          @click="increasePrice(button.price, itemIndex, button.id, button)"
           class="btn additional-buttons"
+          :class="{'btn-primary': button.selected}"
         >
           {{ button.size }} ({{ button.price }} ر.س )
         </button>
       </div>
 
+
       <div class="button-list d-flex flex-column">
-        <h5 class="font-bold mainColor">اختر الاضافات</h5>
+        <h5 class="font-bold mainColor"> {{ $t('cart.chooseAdd') }} </h5>
         <button
           v-for="(button, index) in item.additives"
           :key="index"
-          @click="togglePriceAdditives(button.price , itemIndex, index, button.id)"
+          @click="togglePriceAdditives(button.price , itemIndex, index, button.id, button)"
           class="btn additional-buttons position-relative"
+          :class="{'btn-danger' : button.selected == true}"
         >
          <input
           class="additivesChecked"
@@ -64,10 +67,17 @@
           {{ button.name }} ({{ button.price }} ر.س )
         </button>
       </div>
+
+
+      <div class="mx-3">
+        <button class="btn btn-danger" @click="deleteCart(item.id)">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
     </div>
     <div class="cart-summary mb-5">
       <p class="fw-bold mainColor fs-18">
-        السعر الإجمالي: {{ getTotalPrice() }} ر.س
+        {{ $t('cart.total') }} : {{ getTotalPrice() }} ر.س
       </p>
     </div>
 
@@ -76,7 +86,7 @@
         <div class="col-md-6 mb-2">
           <div class="form-group">
             <label for="" class="d-flex align-items-start fw-bold mb-2">
-              اختر تاريخ الاستلام
+              {{ $t('cart.date') }}
             </label>
             <input type="date" name="date" class="form-control" />
           </div>
@@ -85,7 +95,7 @@
         <div class="col-md-6 mb-2">
           <div class="form-group">
             <label for="" class="d-flex align-items-start fw-bold mb-2">
-              اختر موعد الاستلام
+              {{ $t('cart.time') }}
             </label>
             <input type="time" name="time" class="form-control" />
           </div>
@@ -94,7 +104,7 @@
         <div class="flex-center mt-3">
            <button class="main_btn px-5 pt-2 pb-2" :disabled="disabled">
             <span v-if="!disabled">
-              تأكيد
+              {{ $t('cart.confirm') }}
             </span>
           <div class="spinner-border mx-2" role="status" v-if="disabled">
             <span class="visually-hidden">Loading...</span>
@@ -107,9 +117,9 @@
 
   <!-- most order  -->
   <div class="mt-5 container">
-    <h5 class="fw-bold mainColor text-end">منتجات متشابهة</h5>
+    <h5 class="fw-bold mainColor text-end"> {{ $t('cart.similar') }} </h5>
     <p class="fw-bold  text-end">
-      عادة ما يطلب المستخدمين ايضا هذه الطلبات
+      {{ $t('cart.simDesc') }}
     </p>
     <div class="row">
       <div class="col-md-6" v-for="prod in similar_products" :key="prod.id">
@@ -133,7 +143,7 @@
           <div class="product-price d-flex flex-column align-items-end">
             <!-- <span class="fw-6">{{  prod.price  }}  </span> -->
               <button class="main_btn"                             @click.prevent="addToCart(prod.id)"
->اضف للسلة</button>
+>{{$t('prod.add')}}</button>
           </div>
         </div>
       </div>
@@ -200,15 +210,27 @@ export default {
      async createOrder() {
       const fd = new FormData(this.$refs.createForm);
 
-      const products = [];
-      for (let i = 0; i < this.carts.length; i++){
-        products.push({
-          cart_id: this.carts[i].id,
-          qty: this.carts[i].qty,
-          size_id: this.sizeIds[i],
-          additives : 3
-        })
-      }
+     const products = [];
+
+for (let i = 0; i < this.carts.length; i++) {
+  // Find the selected size
+  const selectedSize = this.carts[i].sizes.find(size => size.selected === true);
+  
+  // If a selected size is found, use its id, otherwise use null or an appropriate default value
+  const sizeId = selectedSize ? selectedSize.id : null;
+  
+  // Find all selected additives and map their ids into an array
+  const selectedAdditives = this.carts[i].additives.filter(additive => additive.selected === true);
+  const addId = selectedAdditives.map(additive => additive.id);
+  
+  products.push({
+    cart_id: this.carts[i].id,
+    qty: this.carts[i].qty,
+    size_id: sizeId,
+    additives: addId
+  });
+}
+
 
       fd.append('products', JSON.stringify(products))
       
@@ -222,10 +244,10 @@ export default {
         .then((res) => {
           if (res.data.key == 'success') {
             this.$toast.add({ severity: 'success', summary: res.data.msg, life: 4000 });
-          
+            localStorage.setItem('order_id', res.data.data.order_id)
             setTimeout(() => {
               this.$router.push('/complete')
-            }, 3000);
+            }, 2000);
           } else {
             this.$toast.add({ severity: 'error', summary: res.data.msg, life: 4000 });
           }
@@ -233,6 +255,7 @@ export default {
 
         }
         )
+
     },
     isAdditiveSelected(itemIndex, addIndex) {
       const additiveKey = `${itemIndex}-${addIndex}`;
@@ -246,32 +269,42 @@ export default {
         this.carts[index].qty--;
       }
     },
-    increasePrice(price, index, id) {
-      this.carts[index].price = price;
-      this.sizeIds.push(id)
-      console.log(this.sizeIds)
+    increasePrice(price, itemIndex, id, button) {
+    // Set the price for the selected cart item
+    this.carts[itemIndex].price = price;
+
+    // Add the selected size id to sizeIds array
+    this.sizeIds.push(id);
+
+    // Unselect all other buttons in the current item's sizes array
+    this.carts[itemIndex].sizes.forEach((size) => {
+      size.selected = false;
+    });
+
+    // Select the clicked button
+    button.selected = true;
+
+    // Unselect all additives for the current item
+   this.addedAdditives = new Set()
+  //     document.querySelectorAll('.additional-buttons:has(.additivesChecked:checked)').forEach((el) => {
+  //   el.style.backgroundColor = '#fff'
+      //  } )
+
+       this.carts[itemIndex].additives.forEach((el) => {
+      el.selected = false;
+    });
   },
-togglePriceAdditives(price, itemIndex, addIndex, id) {
+    togglePriceAdditives(price, itemIndex, addIndex, id , button) {
+      button.selected = !button.selected
     const additiveKey = `${itemIndex}-${addIndex}`;
     
     if (this.addedAdditives.has(additiveKey)) {
         this.carts[itemIndex].price -= price;
         this.addedAdditives.delete(additiveKey);
-        
-        // // Remove the additive from the additives array
-        // const addIndex = this.carts[itemIndex].additives.findIndex(additive => additive.id === id);
-        // if (addIndex !== -1) {
-        //     this.carts[itemIndex].additives.splice(addIndex, 1);
-        // }
     } else {
         this.carts[itemIndex].price += price;
         this.addedAdditives.add(additiveKey);
-        
-        // Add the additive to the additives array
-        // this.carts[itemIndex].additives.push({ id });
   }
-  // console.log(this.addedAdditives)
-    // console.log(this.carts)
     },
     getTotalPrice() {
       return this.carts.reduce((total, item) => {
@@ -282,19 +315,43 @@ togglePriceAdditives(price, itemIndex, addIndex, id) {
       // Handle checkout logic
       this.$router.push("/complete");
     },
-    async getCart() {
-      await axios.get('user/get-cart', {
-         headers: {
-          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
-        }
-      })
-        .then((res) => {
-          if (res.data.key === 'success') {
-            this.carts = res.data.data.carts;
-            this.similar_products = res.data.data.similar_products
-        }
-      } )
-    },
+async getCart() {
+  try {
+    const res = await axios.get('user/get-cart', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      }
+    });
+
+    if (res.data.key === 'success') {
+      const carts = res.data.data.carts;
+
+      // Ensure each size has a selected property
+      carts.forEach(cart => {
+        cart.sizes = cart.sizes.map(size => ({
+          ...size,
+          selected: false
+        }));
+      });
+      carts.forEach(cart => {
+        cart.additives = cart.additives.map(size => ({
+          ...size,
+          selected: false
+        }));
+      });
+
+      // Assign the processed carts to the reactive data property
+      this.carts = carts;
+
+      console.log('tag', this.carts);
+      this.similar_products = res.data.data.similar_products;
+    }
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+  }
+}
+
+ ,
      async addToCart(id) {
       const fd = new FormData();
 
@@ -323,7 +380,36 @@ togglePriceAdditives(price, itemIndex, addIndex, id) {
             });
         }
       } )
-    }
+    },
+     async deleteCart(id) {
+      const fd = new FormData();
+      fd.append('cart_id', id)
+      await axios.post(`user/delete-cart`,fd , {
+         headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+                     lang: 'ar',
+
+        }
+      })
+        .then((res) => {
+          if (res.data.key === 'success') {
+           this.$toast.add({
+              severity: "success",
+              summary: res.data.msg,
+              life: 3000,
+           });
+            setTimeout(() => {
+              this.getCart()
+            }, 1000);
+          } else {
+           this.$toast.add({
+              severity: "error",
+              summary: res.data.msg,
+              life: 3000,
+            });
+        }
+      } )
+    },
   },
   mounted() {
     this.getCart()
@@ -343,7 +429,6 @@ togglePriceAdditives(price, itemIndex, addIndex, id) {
   right: 0;
   opacity: 0;
 }
-.additional-buttons:has(.additivesChecked:checked){background-color: #734b21; color: #fff;}
 .additional-buttons {
   width: 200px;
   border: 1px solid #ccc;

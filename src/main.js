@@ -34,7 +34,7 @@ import VueGoogleMaps from "@fawmi/vue-google-maps";
 
 // import axios
 import axios from "axios";
-axios.defaults.baseURL = "http://coffeekies.trysnapus.com/api/";
+axios.defaults.baseURL = "https://coffeekies.trysnapus.com/api/";
 // axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.lang = localStorage.getItem("locale");
@@ -47,6 +47,7 @@ import "aos/dist/aos.css";
 
 // main styles
 import "./assets/css/style.scss";
+import './assets/css/style_ltr.scss'
 
 createApp(App)
   .use(store)

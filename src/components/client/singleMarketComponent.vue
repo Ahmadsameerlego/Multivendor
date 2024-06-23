@@ -18,14 +18,14 @@
 
             <div class="mt-4 mb-4">
               <router-link :to="'/menu/'+store.id" class="main_btn px-5 fw-6 fs-5">
-                اطلع على قائمة المتجر
+                {{  $t('single.show')  }}
               </router-link>
             </div>
 
             <div class="discount-sign" v-if="discount.has_discount==true">
               <i class="fa-solid fa-tags"></i>
               <span>
-                احصل على خصم {{ discount.discount_percentage }} % على كل عملية شراء باكثر من {{ discount.order_selling }} ريال
+                {{  $t('single.getDiscount')  }} {{ discount.discount_percentage }}{{  $t('single.rate')  }} {{ discount.order_selling }} {{  $t('single.real')  }}
               </span>
             </div>
 
@@ -36,7 +36,7 @@
 
           <div class="market_breif mt-4">
             <h5 class="text-end fw-bold" style="color: #ffc800">
-              نبذه عن {{  store.name  }}
+              {{ $t('single.desc') }} {{  store.name  }}
             </h5>
             <p class="text-end fs-6 fs-6">
               {{  store.description  }}
@@ -45,7 +45,7 @@
         </div>
 
         <div class="best_seller mt-5">
-          <h5 class="mainColor fs-4 text-end">الاكثر مبيعا</h5>
+          <h5 class="mainColor fs-4 text-end">{{ $t('single.mostSell') }}</h5>
 
           <section class="row mt-4">
             <div class="col-md-3 mb-3" v-for="item in best_products" :key="item.id">
@@ -56,7 +56,7 @@
                   </div>
                   <h5 class="fw-bold"> {{ item.name }} </h5>
 
-                  <button class="btn main_btn px-4" @click="addToCart(item.id)">اطلب الان</button>
+                  <button class="btn main_btn px-4" @click="addToCart(item.id)"> {{ $t('single.order') }} </button>
                 </div>
               </div>
             </div>
@@ -64,10 +64,10 @@
         </div>
 
         <div class="rates mt-5" >
-          <h5 class="mainColor fs-4 text-end">اراء العملاء عن المتجر</h5>
+          <h5 class="mainColor fs-4 text-end"> {{ $t('single.opinions') }} </h5>
           <h6>
             <Rating v-model="rate.rate" readonly :cancel="false" />
-            <span class="mainColor fw-6"> ({{  rate.count  }} تقييم ) </span>
+            <span class="mainColor fw-6"> ({{  rate.count  }} {{  $t('single.rates')  }} ) </span>
           </h6>
 
           <div class="singleRate" v-for="rate in rates" :key="rate.id">

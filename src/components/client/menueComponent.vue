@@ -19,7 +19,7 @@
             <div>
               <span class="d-flex">
                 <Rating v-model="value" readonly :cancel="false" />
-                <span class="mainColor fw-6 mx-2"> {{ rate }} تقييم </span>
+                <span class="mainColor fw-6 mx-2"> {{ rate }} {{ $t('single.rates') }} </span>
               </span>
             </div>
           </div>
@@ -34,14 +34,14 @@
               <form action="">
                 <div class="form-group position-relative mb-4 mt-4">
                   <label for="" class="mainColor fw-bold d-flex fs-6 mb-2">
-                    ابحث عن اسم المنتح
+                    {{  $t('prod.search')  }}
                   </label>
-                  <input type="text" class="form-control" placeholder="ابحث " v-model="search" @input="searchProduct"/>
+                  <input type="text" class="form-control" :placeholder="$t('prod.search')" v-model="search" @input="searchProduct"/>
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
 
                 <label for="" class="mainColor fw-bold d-flex fs-6">
-                  اختر حسب التصنيف
+                  {{ $t('prod.cat') }}
                 </label>
 
                 <div class="mt-3 d-flex align-items-start flex-column" v-for="cat in categories" :key="cat.id">
@@ -54,21 +54,21 @@
                 </div>  
 
                   <label for="" class="mainColor fw-bold d-flex fs-6">
-                  اختر حسب
+                  {{ $t('prod.depend') }}
                 </label>
 
                 <div class="mt-3 d-flex align-items-start flex-column">
                   <div class="form-group mb-2">
                     <input type="checkbox" class=""   @change="getHightProducts"/>
                     <label for="" class="fw-6 graColor fs-6 mx-2 fs-7">
-                     الاكثر مبيعا
+                     {{ $t('single.mostSell') }}
                     </label>
                   </div>
                   
                   <div class="form-group mb-2">
                     <input type="checkbox" class=""   @change="getHightProducts"/>
                     <label for="" class="fw-6 graColor fs-6 mx-2 fs-7">
-                     الاعلى تقييم
+                     {{ $t('prod.mostRate') }}
                     </label>
                   </div>
                  
@@ -80,7 +80,7 @@
           <div class="col-md-8">
             <div class="card pt-2 pb-2 px-3">
               <Accordion :activeIndex="0">
-                <AccordionTab header="كل المنتجات">
+                <AccordionTab :header="$t('prod.all')">
                   <div class="row" v-if="products.length>0">
                     <div class="col-md-10" v-for="store in products" :key="store.id">
                       <div class="single_menu mb-3 flex_between">
@@ -107,14 +107,14 @@
                             class="btn main_btn px-2 w-20 h-20 mt-3 px-0 pt-0 pb-0 "
                             @click="addToCart(store.id)"
                           >
-                            اضف للسلة
+                            {{  $t('prod.add')  }}
                           </button>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                    <Message severity="error" v-else> لا توجد منتجات </Message>
+                    <Message severity="error" v-else> {{ $t('prod.empty') }} </Message>
                 </AccordionTab>
                 
                 <!-- <AccordionTab header="Header III">

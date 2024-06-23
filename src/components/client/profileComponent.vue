@@ -3,182 +3,118 @@
     <div class="container">
       <!-- start breadcrumb  -->
       <div class="breadcrumb d-flex">
-        <router-link to="/" class="inActive"> الرئيسية </router-link>&nbsp; -
+        <router-link to="/" class="inActive"> {{  $t('profile.main')  }} </router-link>&nbsp; -
         &nbsp;
-        <p class="active mainColor">الملف الشخصي</p>
+        <p class="active mainColor"> {{  $t('profile.profile')  }} </p>
 
         <section class="loginSection" style="width: 93%; margin: auto">
-          <h3 class="fw-bold mb-3">الملف الشخصي</h3>
+          <h3 class="fw-bold mb-3"> {{  $t('profile.profile')  }} </h3>
           <p class="registerParagraph fw-bold d-flex align-items-center">
             <span class="step flex_center">1</span>
-            يمكنك تعديل بياناتك من هنا
+            {{ $t('profile.edit') }}
           </p>
 
-          <form
-            class="flex flex-wrap gap-3 p-fluid mt-4"
-            ref="registerForm"
-            @submit.prevent="register"
-          >
-            <div class="profile_image mx-auto d-flex position-relative mb-3">
-              <img :src="image" alt="" />
-              <input type="file" name="image" class="image" @change="updateProfileImage" />
+          <form @submit.prevent="login" ref="profileForm">
+
+             <section class="profile_pic mx-auto d-flex">
+                    <input type="file" name="image" @change="uploadProfilePic" class="uploadInput">
+                    <!-- default image  -->
+                    <img :src="profile_image" name="image" ref="profile" class="profile_image" alt="">
+                    <!-- edit  -->
+                    <span class="edit">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </span>
+                </section>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-group mb-3 flex-column d-flex align-items-start">
+              <label for=""> {{ $t('profile.firstName') }} </label>
+              <InputText
+                v-model="first_name"
+                inputId="withoutgrouping"
+                :useGrouping="false"
+                :placeholder="$t('profile.firstDesc')"
+              />
             </div>
-            <div class="row">
-              <div class="col-md-6 mb-2">
-                <!-- user name  -->
-                <div class="position-relative flex-auto">
-                  <label for="integeronly" class="label fw-bold block mb-2">
-                    اسم الطالب
-                  </label>
-                  <InputText
-                    type="text"
-                    class="defaultInput2"
-                    v-model="name"
-                    name="name"
-                    placeholder="الرجاء ادخال اسم الطالب"
-                  />
-                  <!-- icon  -->
-                  <div class="inputIcon">
-                    <img :src="require('@/assets/imgs/user.svg')" alt="" />
-                  </div>
-                </div>
-              </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group mb-3 flex-column d-flex align-items-start">
+              <label for=""> {{  $t('profile.lastName')  }} </label>
+              <InputText
+                v-model="last_name"
+                inputId="withoutgrouping"
+                :useGrouping="false"
+                :placeholder="$t('profile.lastDesc')"
+              />
+            </div>
+          </div>
 
-              <div class="col-md-6 mb-2">
-                <!-- phone  -->
-                <div class="position-relative flex-auto defaultInput">
-                  <label for="integeronly" class="label fw-bold block mb-2"
-                    >رقم الجوال
-                  </label>
-                  <input
-                    type="text"
-                    class="form-control defaultInput"
-                    name="phone"
-                    placeholder="الرجاء ادخال رقم الجوال"
-                    v-model="phone"
-                  />
-
-                  <!-- icon  -->
-                  <div class="inputIcon">
-                    <img :src="require('@/assets/imgs/phone.svg')" alt="" />
-                  </div>
-
-                  <!-- select phone  -->
-                </div>
-                <div>
-                  <span v-if="phoneValid" class="text-danger">
-                    يجب ان يكون رقم الهاتف بين ٩ او ١٠ ارقام
-                  </span>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-5">
-                <!-- phone  -->
-                <div class="position-relative flex-auto defaultInput">
-                  <label for="integeronly" class="label fw-bold block mb-2"
-                    >المحافظة
-                  </label>
-                  <!-- select phone  -->
-                  <Dropdown
-                    v-model="selectedRegion"
-                    :options="regions"
-                    optionLabel="name"
-                    class="w-100 md:w-14rem"
-                    @change="getRegionId"
-                  />
-                </div>
-              </div>
-              <div class="col-md-6 mb-5">
-                <!-- phone  -->
-                <div class="position-relative flex-auto defaultInput">
-                  <label for="integeronly" class="label fw-bold block mb-2"
-                    >المدينة
-                  </label>
-                  <!-- select phone  -->
-                  <Dropdown
-                    v-model="selectedCity"
-                    :options="cities"
-                    optionLabel="name"
-                    class="w-100 md:w-14rem"
-                  />
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-2 mt-3">
-                <!-- user name  -->
-                <div class="position-relative flex-auto">
-                  <label for="integeronly" class="label fw-bold block mb-2">
-                    العنوان
-                  </label>
-                  <InputText
-                    type="text"
-                    class="defaultInput2"
-                    v-model="address"
-                    name="address"
-                    placeholder="الرجاء ادخال العنوان"
-                  />
-                  <!-- icon  -->
-                  <div class="inputIcon">
-                    <img :src="require('@/assets/imgs/user.svg')" alt="" />
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-2 mt-3">
-                <!-- phone  -->
-                <div class="position-relative flex-auto defaultInput">
-                  <label for="integeronly" class="label fw-bold block mb-2"
-                    >تاريخ الميلاد
-                  </label>
-                  <!-- select phone  -->
-                  <Calendar v-model="date" />
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-2">
-                <!-- phone  -->
-                <div class="position-relative flex-auto defaultInput">
-                  <label for="integeronly" class="label fw-bold block mb-2"
-                    >يرجى تحديد النوع
-                  </label>
-                  <!-- select phone  -->
-                  <div
-                    class="flex flex-wrap gap-3 d-flex justify-content-between"
-                  >
-                    <div class="flex align-items-center">
-                      <RadioButton
-                        v-model="gender"
-                        inputId="birth_date1"
-                        name="pizza"
-                        value="male"
-                      />
-                      <label for="ingredient1" class="mx-2">ذكر</label>
-                    </div>
-                    <div class="flex align-items-center">
-                      <RadioButton
-                        v-model="gender"
-                        inputId="birth_date2"
-                        name="pizza"
-                        value="female"
-                      />
-                      <label for="ingredient2" class="mx-2">انثي</label>
-                    </div>
-                  </div>
-                </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group mb-3 flex-column d-flex align-items-start position-relative">
+              <label for=""> {{ $t('prfile.phone') }} </label>
+              <InputText
+                v-model="phone"
+                inputId="withoutgrouping"
+                :useGrouping="false"
+                :placeholder="$t('profile.phoneDesc')"
+              />
+              <div class="country_code">
+                <Dropdown
+                  v-model="selectedCountry"
+                  :options="countries"
+                  optionLabel="code"
+                  class="w-full md:w-14rem"
+                />
               </div>
             </div>
+          </div>
 
-            <div class="mt-3">
-              <button class="main_btn w-50 mx-auto flex_center pt-3 pb-3 fs-5">
-                <span v-if="!spinner">حفظ البيانات</span>
-                <div class="spinner-border mx-2" role="status" v-if="spinner">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </button>
+          <div class="col-md-6 mb-3">
+            <div class="form-group mb-3 flex-column d-flex align-items-start">
+              <label for=""> {{ $t('profile.email') }} </label>
+              <InputText
+                v-model="email"
+                inputId="withoutgrouping"
+                :useGrouping="false"
+                :placeholder="$t('profile.emailDesc')"
+              />
             </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group d-flex position-relative flex-column d-flex align-items-start">
+                            <label class="d-block" for=""> {{ $t('profile.address') }} </label>
 
-            <!-- new account  -->
-          </form>
+              <InputText
+                v-model="address"
+                @focus="googleMap = true"
+                type="text"
+                class=""
+                :placeholder="$t('profile.addressDesc')"
+              />
+            </div>
+          </div>
+
+        
+
+          
+        </div>
+
+        <div class="flex_center mb-4">
+          <button class="pt-3 br-5 pb-3 px-5 main_btn btn w-25" :disabled="disabled" >
+            <span v-if="!disabled"> {{ $t('cart.confirm')  }} </span>
+            <ProgressSpinner v-if="disabled" />
+
+          </button>
+        </div>
+        <div class="flex_center mb-4">
+          <router-link to="/changePassword" class="pt-3 br-5 pb-3 px-5 main_btn btn w-25 sec_btn"  >
+            {{ $t('profile.changePassword') }}
+          </router-link>
+        </div>
+
+        
+      </form>
         </section>
       </div>
     </div>
@@ -186,190 +122,270 @@
 
   <Toast />
   <!--  <sendOtp :openOtp="openOtp"/> -->
+
+
+   <!-- google map modal  -->
+  <Dialog v-model:visible="googleMap" modal :style="{ width: '50vw' }">
+    <GMapMap
+      :center="locations"
+      :zoom="11"
+      map-type-id="terrain"
+      style="width: 100vw; height: 900px"
+    >
+      <GMapAutocomplete
+        :placeholder="$t('profile.addressDesc')"
+        @place_changed="onPlaceChanged"
+      >
+      </GMapAutocomplete>
+      <GMapMarker
+        :position="locations"
+        :clickable="true"
+        :draggable="true"
+        @mouseover="onMarkerDragEnd($event)"
+      />
+    </GMapMap>
+  </Dialog>
 </template>
 
 <script>
-import axios from "axios";
-import InputText from "primevue/inputtext";
+// import Password from "primevue/password";
 import Dropdown from "primevue/dropdown";
-import Calendar from "primevue/calendar";
-import RadioButton from "primevue/radiobutton";
-import Toast from "primevue/toast";
-import moment from 'moment'
+import InputText from "primevue/inputtext";
+
+import ProgressSpinner from 'primevue/progressspinner';
+import axios from 'axios';
+import Toast from 'primevue/toast';
+// import moment from 'moment'
+import Dialog from "primevue/dialog";
 
 export default {
-  data() {
-    return {
-      name: "",
-      image: "",
-      phone: "",
-      address: "",
-      countries: [],
-      disabled: true,
-      spinner: false,
-      openOtp: false,
-      is_conditions: null,
-      years: [
-        {
-          id: 1,
-          name: "الاول الثانوي",
-        },
-        {
-          id: 2,
-          name: "الثاني الثانوي",
-        },
-        {
-          id: 3,
-          name: "الثالث الثانوي",
-        },
-      ],
-      regions: [],
-      selectedRegion: null,
-      regionID: null,
-      cities: [],
-      selectedCity: null,
-      cityID: "",
-      gender: null,
-      date: "",
-    };
-  },
-  computed: {
-    formatedDate() {
-        return moment(this.date).format('MMMM Do YYYY')
-      }
-  },
-  methods: {
-    async getRegion() {
-      await axios.get("regions").then((res) => {
-        this.regions = res.data.data.regions;
-      });
-    },
-    getRegionId() {
-      this.regionID = this.selectedRegion.id;
-      this.getCities();
-    },
-    async getCities() {
-      await axios.get(`region/${this.regionID}/cities`).then((res) => {
-        this.cities = res.data.data.cities;
-      });
-    },
-    async getAllCities() {
-      await axios.get(`cities`).then((res) => {
-        this.cities = res.data.data.cities;
-      });
-    },
-    updateProfileImage(event) {
-      const file = event.target.files[0];
-      if (file) {
-        // Read the file as a data URL
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.image = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    // get user data
-    async getProfile() {
-      await axios
-        .get("profile", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+    data() {
+        return{
+          otp: false,
+                countries: [],
+          disabled: false,
+          selectedCountry: {
+            code :'00966'
           },
-        })
-        .then((res) => {
-          if (res.data.key == "success") {
-            let user = res.data.data.user;
-            this.phone = user.phone;
-            this.name = user.name;
-            this.address = user.address;
-            this.regionID = user.region_id;
-            this.date =  moment(user.birth_date).format('MMMM Do YYYY');
-            this.gender = user.gender;
-            this.image = user.image;
-            for (let i = 0; i < this.regions.length; i++) {
-              if (this.regions[i].id == user.region_id) {
-                this.selectedRegion = this.regions[i];
-              }
-            }
-            this.cityID = user.city_id;
-            for (let i = 0; i < this.cities.length; i++) {
-              if (this.cities[i].id == user.city_id) {
-                this.selectedCity = this.cities[i];
-              }
-            }
-          }
-        });
+          phone: '',
+          email: '',
+          first_name: '',
+          last_name: '',
+          password: '',
+          profile_image: '',
+          address: "",
+      googleMap: false,
+      locations: {
+        lat: 0,
+        lng: 0,
+      },
+      currentLocation: {},
+        }      
+  },  
+  methods: {
+    // get current location
+    geolocation() {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.locations = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+      });
     },
-    // register function
-    async register() {
-      this.disabled = true;
-      this.spinner = true;
-      const fd = new FormData(this.$refs.registerForm);
-        fd.append('name', this.name)
-        fd.append('phone', this.phone)
-        fd.append('address', this.address)
-        fd.append('birth_date', this.date)
-        if (this.selectedRegion !== null) {
-          fd.append('region_id', this.selectedRegion.id)
-        }
-        if (this.selectedCity != null) {
-          fd.append('city_id', this.selectedCity.id)
-        }
-        fd.append('gender', this.gender)
-      try {
-        await axios.post('update-profile?_method=put', fd ,{
-          headers: {
-            Authorization : `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-          .then((res) => {
-            if (res.data.key === 'success') {
-          this.$toast.add({
-            severity: "success",
-            summary: res.data.msg,
-            life: 3000,
-          });
-          this.disabled = false;
-          this.spinner = false;
+    // get new value after dragged
+    onMarkerDragEnd(event) {
+      // get new lat lang value
+      const newLat = event.latLng.lat();
+      const newLng = event.latLng.lng();
+      this.locations = {
+        lat: newLat,
+        lng: newLng,
+      };
+
+      // get format_address
+      const latLng = event.latLng;
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ location: latLng }, (results, status) => {
+        if (status === "OK") {
+          this.address = results[0].formatted_address;
         } else {
-          this.$toast.add({
-            severity: "error",
-            summary: res.data.msg,
-            life: 3000,
-          });
-          this.disabled = false;
-          this.spinner = false;
-        }    
-        } )
-        
-      } catch (err) {
-        console.error(err);
+          console.error(
+            "Geocode was not successful for the following reason: " + status
+          );
+        }
+      });
+    },
+
+    onPlaceChanged(place) {
+      if (place.geometry) {
+        this.locations = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+        };
+        this.address = place.formatted_address;
+        this.updateLocations();
       }
     },
+
+    // get countries 
+    async getCountries() {
+      await axios.get('countries')
+        .then((res) => {
+        this.countries = res.data.data
+      } )
+     },
+     uploadProfilePic(e){
+            const file = e.target.files[0];
+            this.$refs.profile.src = URL.createObjectURL(file);
+
+        },
+     async getProfile() {
+       await axios.get('user/show-profile', {
+         headers: {
+            Authorization :`Bearer ${localStorage.getItem('token')}`
+          }
+       })
+         .then((res) => {
+           if (res.data.key === 'success') {
+             this.first_name = res.data.data.first_name;
+             this.last_name = res.data.data.last_name;
+             this.email = res.data.data.email;
+             this.phone = res.data.data.phone.phone;
+             this.selectedCountry.code = res.data.data.phone.country_key;
+             this.profile_image = res.data.data.image;
+             for (let i = 0; i < this.countries.length; i++){
+               if (res.data.data.phone.country_key == this.countries[i].code) {
+                  this.selectedCountry = this.countries[i]
+                }
+             }
+
+             this.address  = res.data.data.address_data.address 
+             this.locations.lat  = res.data.data.address_data.lat 
+             this.locations.lng  = res.data.data.address_data.lng 
+          }
+        } )
+    },
+    // login 
+    async login() {
+      this.disabled = true;
+      const fd = new FormData(this.$refs.profileForm)
+      fd.append('first_name', this.first_name)
+      fd.append('last_name', this.last_name)
+      fd.append('phone', this.phone)
+      fd.append('email', this.email)
+      
+      if (this.selectedCountry) {
+                fd.append('country_key', this.selectedCountry.code)
+        
+      }
+      // fd.append('device_type', 'web')
+      // fd.append('device_id', localStorage.getItem('device_id'))
+
+      await axios.post('user/update-profile', fd, {
+        headers: {
+          lang: 'ar',
+                      Authorization :`Bearer ${localStorage.getItem('token')}`
+
+        }
+      })
+        .then((res) => {
+          if (res.data.key == 'success') {
+            this.$toast.add({ severity: 'success', summary: res.data.msg, life: 4000 });
+            // localStorage.setItem('user', JSON.stringify(res.data.data))
+            // localStorage.setItem('token', res.data.data.token)
+            // sessionStorage.setItem('phone', this.phone)
+            // sessionStorage.setItem('country_key', this.selectedCountry.code)
+            setTimeout(() => {
+              this.otp = true;
+            }, 2000);
+          } else {
+            this.$toast.add({ severity: 'error', summary: res.data.msg, life: 4000 });
+          }
+             this.disabled = false ;
+
+        }
+        )
+
+    },
+    // update location 
+    async updateLocations() {
+      this.disabled = true;
+      const fd = new FormData()
+      fd.append('lat', this.locations.lat)
+      fd.append('long', this.locations.lng)
+      fd.append('address', this.address)
+
+      // fd.append('device_type', 'web')
+      // fd.append('device_id', localStorage.getItem('device_id'))
+
+      await axios.post('user/update-location', fd, {
+        headers: {
+          lang: 'ar',
+                      Authorization :`Bearer ${localStorage.getItem('token')}`
+
+        }
+      })
+        .then((res) => {
+          if (res.data.key == 'success') {
+            this.$toast.add({ severity: 'success', summary: res.data.msg, life: 4000 });
+            
+          } else {
+            this.$toast.add({ severity: 'error', summary: res.data.msg, life: 4000 });
+          }
+
+        }
+        )
+
+    },
   },
+   mounted() {
+    this.getCountries()
+     this.getProfile();
+
+    fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => localStorage.setItem('device_id', data.ip))
+       .catch(error => console.error(error));
+
+      //  setTimeout(() => {
+      //   document.querySelector('.p-dropdown-label').innerHTML = this.selectedCountry.code
+      //  }, 1000);
+  },
+
   components: {
-    InputText,
-    // InputNumber,
-    Dropdown,
     // Password,
+    Dropdown,
+    InputText,
+    ProgressSpinner,
     Toast,
-    RadioButton,
-    Calendar,
-    // sendOtp
+    Dialog
   },
-  mounted() {
-    this.getRegion();
-    this.getProfile();
-    this.getAllCities();
-  },
-  //   created(){
-  //     this.getCountries();
-  //   }
 };
 </script>
 
 <style scoped lang="scss">
+.profile_pic{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  .uploadInput{
+    position: absolute;
+    top : 0;
+    right:0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+}
+:deep(.p-inputtext){
+  width: 100% !important;
+}
+:deep(.p-dropdown){
+      background: #f6f6f6 !important;
+}
 .profile_image {
   width: 120px;
   height: 120px;

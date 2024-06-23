@@ -61,10 +61,11 @@
         </div> -->
 
         <div class="flex_center mb-4 mt-4">
-          <button class="pt-3 br-5 pb-3 px-5 main_btn btn w-100" :disabled="disabled">
+          <button class="pt-3 br-5 pb-3 px-5 main_btn  w-100" :disabled="disabled">
             <span v-if="!disabled">تسجيل الدخول</span>
-                          <ProgressSpinner v-if="disabled" />
-
+                    <div class="spinner-border mx-2" role="status" v-if="disabled">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
           </button>
         </div>
 
@@ -94,7 +95,7 @@
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
 import Dropdown from "primevue/dropdown";
-import ProgressSpinner from 'primevue/progressspinner';
+// import ProgressSpinner from 'primevue/progressspinner';
 import axios from 'axios';
 import Toast from 'primevue/toast';
 
@@ -162,7 +163,6 @@ export default {
     Password,
     InputText,
     Dropdown,
-    ProgressSpinner,
     Toast
   },
 };

@@ -2,7 +2,7 @@
   <div class="container mt-5 mb-5">
     <div class="card">
       <TabView>
-        <TabPanel header="العروض">
+        <TabPanel :header="$t('order.offers')">
           <!-- offers  -->
           <div class="row" v-if="offers.length > 0">
             <div class="col-md-6 mb-3" v-for="offer in offers" :key="offer.id">
@@ -13,7 +13,7 @@
                   </div>
                   <div class="mx-4">
                     <h6 class="fw-bold">{{ offer.name }}</h6>
-                    <router-link to="/market/1" class="mb-3"
+                    <router-link :to="'/market/'+offer.store_id" class="mb-3"
                       >{{ offer.store_name }}</router-link
                     >
                   </div>
@@ -31,114 +31,50 @@
             </div>
             
           </div>
-                              <Message severity="error" v-else> لا توجد عروض الى الان </Message>
+                              <Message severity="error" v-else> {{  $t('order.noOffers')  }} </Message>
 
         </TabPanel>
-        <TabPanel header="الخصومات">
+        <TabPanel :header="$t('order.discounts')">
           <div class="discounts">
-            <h6 class="mb-4">احصل على خصومات فورية على اصناف مختارة</h6>
-            <div class="row mt-4">
+            <h6 class="mb-4"> {{ $t('order.get') }} </h6>
+            <div class="row mt-4" v-if="discounts.length > 0">
               <div class="col-md-4 mb-3" v-for="dis in discounts" :key="dis.id">
-                <router-link to="/market/1" class="normal_link">
+                <router-link :to="'/market/'+dis.id" class="normal_link">
                   <div
                     class="single_market flex_center flex-column position-relative"
                   >
                     <div class="market_image">
-                      <img src="@/assets/imgs/coffee.webp" alt="" />
+                      <img :src="dis.cover" alt="" />
                     </div>
 
                     <div class="market_name mt-3">
                       <span class="fs-5 fw-bold market-item">
                         <i class="fa-solid fa-utensils"></i>
-                        <span class="mx-3"> Bolivard </span>
+                        <span class="mx-3"> {{ dis.name }} </span>
                       </span>
                     </div>
 
                     <div class="market_type">
                       <span class="fs-6 fw-6 market-item">
                         <i class="fa-solid fa-layer-group"></i>
-                        <span class="mx-3"> coffee , cake </span>
+                        <span class="mx-3"> {{ dis.categories }} </span>
                       </span>
                     </div>
                     <div class="market_type">
                       <span class="fs-7 fw-6 market-item">
                         <i class="fa-solid fa-location-dot"></i>
-                        <span class="mx-3"> يبعد 10 كم </span>
+                        <span class="mx-3"> يبعد {{ dis.distance }} كم </span>
                       </span>
                     </div>
 
                     <!-- discount  -->
-                    <div class="discount">20 %</div>
-                  </div>
-                </router-link>
-              </div>
-
-              <div class="col-md-4 mb-3">
-                <router-link to="/market/1" class="normal_link">
-                  <div class="single_market flex_center flex-column">
-                    <div class="market_image">
-                      <img src="@/assets/imgs/cake.jpg" alt="" />
-                    </div>
-
-                    <div class="market_name mt-3">
-                      <span class="fs-5 fw-bold market-item">
-                        <i class="fa-solid fa-utensils"></i>
-                        <span class="mx-3"> Bolivard </span>
-                      </span>
-                    </div>
-
-                    <div class="market_type">
-                      <span class="fs-6 fw-6 market-item">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span class="mx-3"> coffee , cake </span>
-                      </span>
-                    </div>
-                    <div class="market_type">
-                      <span class="fs-7 fw-6 market-item">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span class="mx-3"> يبعد 10 كم </span>
-                      </span>
-                    </div>
-
-                    <!-- discount  -->
-                    <div class="discount">20 %</div>
-                  </div>
-                </router-link>
-              </div>
-
-              <div class="col-md-4 mb-3">
-                <router-link to="/market/1" class="normal_link">
-                  <div class="single_market flex_center flex-column">
-                    <div class="market_image">
-                      <img src="@/assets/imgs/coffee1.webp" alt="" />
-                    </div>
-
-                    <div class="market_name mt-3">
-                      <span class="fs-5 fw-bold market-item">
-                        <i class="fa-solid fa-utensils"></i>
-                        <span class="mx-3"> Bolivard </span>
-                      </span>
-                    </div>
-
-                    <div class="market_type">
-                      <span class="fs-6 fw-6 market-item">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span class="mx-3"> coffee , cake </span>
-                      </span>
-                    </div>
-                    <div class="market_type">
-                      <span class="fs-7 fw-6 market-item">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <span class="mx-3"> يبعد 10 كم </span>
-                      </span>
-                    </div>
-
-                    <!-- discount  -->
-                    <div class="discount">20 %</div>
+                    <div class="discount">{{dis.discount_ratio}} %</div>
                   </div>
                 </router-link>
               </div>
             </div>
+            <Message severity="error" v-else> {{ $t('order.noDiscount') }} </Message>
+
           </div>
         </TabPanel>
       </TabView>

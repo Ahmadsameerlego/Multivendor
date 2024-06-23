@@ -38,12 +38,13 @@
             <ul class="navbar-nav d-none d-sm-flex">
               <li class="nav-item kEkINZ pa-m-0 offers-li px-sm">
                 <router-link class="jYUbJg pa-m-10 f-m-14" to="/markets">
-                  متاجرنا
+                  {{  $t('nav.stores')  }}
                 </router-link>
               </li>
               <li class="nav-item kEkINZ pa-m-0 offers-li px-sm">
                 <router-link class="jYUbJg pa-m-10 f-m-14" to="reserve"
-                  >حجز المقاعد
+                  >
+                  {{ $t('nav.reserve') }}
                 </router-link>
               </li>
               <li class="nav-item kEkINZ pa-m-0 become-partner-li px-sm">
@@ -51,16 +52,25 @@
                   rel="noreferrer"
                   class="jYUbJg pa-m-10 f-m-14"
                   to="/offers"
-                  >العروض والخصومات
+                  >
+                  {{  $t('nav.offers')  }}
                 </router-link>
               </li>
-              <li class="nav-item kEkINZ d-sm-block px-2">
+              <!-- <li class="nav-item kEkINZ d-sm-block px-2">
                 <a
                   data-testid="switch-language-link"
                   href="/egypt"
                   class="jYUbJg ltr"
                   >English</a
                 >
+              </li> -->
+              <li class="nav-item kEkINZ d-sm-block px-2">
+                <!-- lang  -->
+                <button class="lang flex_center mx-2" @click="switchLang"> 
+                    <span v-if="$i18n.locale=='en'" >AR</span>
+                    <span v-else-if="$i18n.locale=='ar'" >EN</span> 
+                    <i class="fa-solid fa-globe mx-2"></i>
+                </button>
               </li>
 
                <li class="nav-item kEkINZ d-sm-block px-2" v-if="isAuthed">
@@ -74,7 +84,7 @@
               </li>
                <li class="nav-item kEkINZ d-sm-block px-2" v-if="isAuthed">
                 <router-link
-                  to="/cart"
+                  to="/notification"
                   class="cart"
                   >
 <i class="fa-solid fa-bell"></i>                  </router-link
@@ -104,7 +114,7 @@
                   class="btn btn-login f-m-14 pa-m-10"
                   data-testid="login"
                 >
-                  تسجيل الدخول
+                  {{ $t('nav.login') }}
                 </router-link>
               </li>
                <div class="dropdown profile br-5" v-if="isAuthed">
@@ -124,7 +134,7 @@
                 height="30"
                 alt=""
               />
-              <span class="name">اهلا {{ username }}</span>
+              <span class="name">{{  $t('nav.welcome')  }} {{ username }}</span>
 
               <!-- <i class="fa-regular fa-user user_profile"></i> -->
             </button>
@@ -137,7 +147,7 @@
                   <span class="profile_icon flex_center">
                     <i class="fa-solid fa-user-pen"></i>
                   </span>
-                  <span class="mx-2 fw-6"> الملف الشخصي </span>
+                  <span class="mx-2 fw-6"> {{ $t('nav.profile') }} </span>
                 </router-link>
               </li>
 
@@ -149,7 +159,18 @@
                   <span class="profile_icon flex_center">
                     <i class="fa-solid fa-bag-shopping"></i>
                   </span>
-                  <span class="mx-2 fw-6"> طلباتك </span>
+                  <span class="mx-2 fw-6"> {{  $t('nav.orders')  }}  </span>
+                </router-link>
+              </li>
+              <li class="mb-3">
+                <router-link
+                  class="dropdown-item d-flex justify-content-start align-items-center"
+                  to="/reservations"
+                >
+                  <span class="profile_icon flex_center">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                  </span>
+                  <span class="mx-2 fw-6"> {{  $t('nav.rerserve')  }} </span>
                 </router-link>
               </li>
 
@@ -161,7 +182,18 @@
                   <span class="profile_icon logout flex_center">
                     <i class="fa-solid fa-right-from-bracket"></i>
                   </span>
-                  <span class="mx-2 fw-6"> تسجيل الخروج </span>
+                  <span class="mx-2 fw-6"> {{  $t('nav.logout')  }} </span>
+                </button>
+              </li>
+              <li class="mb-3">
+                <button
+                  class="dropdown-item d-flex justify-content-start align-items-center"
+                  @click.prevent="deleteAccount"
+                >
+                  <span class="profile_icon logout flex_center text-danger">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                  </span>
+                  <span class="mx-2 fw-6 text-danger"> {{  $t('nav.delete')  }} </span>
                 </button>
               </li>
             </ul>
@@ -176,9 +208,13 @@
       </div>
     </div>
   </div>
+  <Toast />
 </template>
 
 <script>
+import axios from 'axios';
+import Toast from 'primevue/toast';
+
 export default {
   name: "MultivendorHeaderComponent",
 
@@ -190,9 +226,77 @@ export default {
     };
   },
   methods: {
+    switchLang(){
+            let lang = 'ar';
+            if(this.$i18n.locale == 'ar'){
+                lang = 'en';
+                this.arabic = false;
+            }
+
+            if(localStorage.getItem('locale')){
+                localStorage.removeItem('locale');
+            }
+
+            localStorage.setItem('locale' ,lang);
+            this.arabic = true;
+
+            location.reload()
+    },
+        
     toggleNav() {
       document.querySelector('.navbar-nav').classList.toggle('active')
-    }
+    },
+      // sign out
+        async signOut(){
+            const token = localStorage.getItem('token');
+            // const token = JSON.parse(localStorage.getItem('user'))[0].token;
+            const headers = {
+              Authorization: `Bearer ${token}`,
+                lang : 'ar'
+          };
+            const fd = new FormData()
+            await axios.post(`user/logout?device_id=test00&device_type=web`, fd ,{headers})
+            .then( (res)=>{
+                if( res.data.key == 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.msg, life: 3000 });
+                    setTimeout(() => {
+                        this.$router.push('/login')
+                    }, 1000);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
+                }
+            } )
+        },
+      // sign out
+        async deleteAccount(){
+            const token = localStorage.getItem('token');
+            // const token = JSON.parse(localStorage.getItem('user'))[0].token;
+            const headers = {
+              Authorization: `Bearer ${token}`,
+                lang : 'ar'
+          };
+          const fd = new FormData()
+            fd.append('device_id' , 'test')
+            fd.append('device_type' , 'web')
+            await axios.post(`user/delete-account`, fd ,{headers})
+            .then( (res)=>{
+                if( res.data.key == 'success' ){
+                    this.$toast.add({ severity: 'success', summary: res.data.msg, life: 3000 });
+                    setTimeout(() => {
+                        this.$router.push('/login')
+                    }, 1000);
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                }else{
+                    this.$toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
+                }
+            } )
+        },
+  },
+  components: {
+    Toast
   },
   mounted() {
     if( localStorage.getItem('token') ){
@@ -208,6 +312,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ .lang{
+                background-color: transparent;
+                color:#fff ;
+                border: none;
+                font-weight: bold;
+
+            }
 .header {
   background: #734b21;
   padding-top: 5px;

@@ -1,0 +1,73 @@
+body{
+    &.ltr{
+           .location-section .fa-location-crosshairs {
+    right: 28%;
+    left:auto
+}
+        .fa-chevron-left{
+            transform: rotate(180deg);
+        }
+        .fa-magnifying-glass {
+                right: 10px;
+                left: auto;
+            }
+            .text-end{
+                text-align: left !important;
+            }
+            .p-accordion .p-accordion-header .p-accordion-header-link .p-accordion-toggle-icon {
+    right: 20px;
+    left: auto;
+}
+        .footer .accordion-button::after {
+            margin-left: auto !important;
+            margin-right: 0 !important;
+        }
+        direction: ltr !important;
+        text-align: left;
+        .allRooms .room .unread_count , .allRooms .room .time{
+            right: 21px;
+            left: auto;
+        }
+        .single_card .abs_time {
+            right: 10px;
+            left: auto;
+        }
+        .single_card .abs_details {
+            right: 19px;
+            left: auto;
+            svg{
+                transform: rotate(180deg);
+            }
+        }
+        .p-dropdown .p-dropdown-trigger {
+            width: 50px !important;
+        }
+        .inputIcon {
+            left: 10px;
+            right: auto;
+        }
+        .editPhone{
+            right: 5%;
+            left: auto !important;
+        }
+        .p-dropdown {
+            padding-right: 12px !important;
+            padding-left: 24px !important;
+        }
+        .p-multiselect .p-multiselect-trigger {
+            right: 0;
+            left: auto;
+        }
+        .chat_content .chat_footer .submit {
+            right: 10px;
+            left: auto;
+        }
+        .chat_details h5{
+            text-align: left !important;
+        }
+        .allRooms .room{
+            overflow: hidden;
+        }
+    }
+ 
+}

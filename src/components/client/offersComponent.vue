@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h4 class="text-center fw-bold"> اكتشف عروضنا وخصوماتنا </h4>
+        <h4 class="text-center fw-bold"> {{  $t('home.offers')  }} </h4>
         <p class="fs-5 fw-6">
-            تخفيضات مدهشة، فرصة للتوفير والاستمتاع بالتسوق
+            {{  $t('home.offersDesc')  }}
         </p>
 
         <section class="offers">

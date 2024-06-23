@@ -2,16 +2,16 @@
   <div class="location-section">
     <section class="flex_center h-100">
       <div>
-        <h1 class="mb-4 whiteColor">اطلب قهوتك اونلاين في اي وقت</h1>
+        <h1 class="mb-4 whiteColor"> {{  $t('home.order')  }} </h1>
         <div class="form-group d-flex position-relative">
           <input
             v-model="address"
             @focus="googleMap = true"
             type="text"
             class="form-control"
-            placeholder="ابحث عن مدينة , عنوان واي ما تريد"
+            :placeholder="$t('home.search')"
           />
-          <button class="btn main_btn mx-3 w-25 pt-3 pb-3" @click="googleMap = true">اختر موقعك</button>
+          <button class="btn main_btn mx-3 w-25 pt-3 pb-3" @click="googleMap = true"> {{  $t('home.choose')  }} </button>
           <i class="fa-solid fa-location-crosshairs"></i>
         </div>
       </div>
@@ -27,7 +27,7 @@
       style="width: 100vw; height: 900px"
     >
       <GMapAutocomplete
-        placeholder="ابحث عن موقعك"
+        :placeholder="$t('home.search')"
         @place_changed="onPlaceChanged"
       >
       </GMapAutocomplete>

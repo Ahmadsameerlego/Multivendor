@@ -1,8 +1,8 @@
 <template>
     <div class="container pt-5 pb-5">
-        <h4 class="text-center fw-bold"> اكتشف منتجاتنا </h4>
+        <h4 class="text-center fw-bold"> {{ $t('home.discover') }} </h4>
         <p class="fs-5 fw-6">
-عالم مدهش من النكهات والروائح واللذة المبهر        
+                {{  $t('home.discoverDesc')  }}
         </p>
         <div class="">
             <div class="row">
@@ -20,7 +20,7 @@
                         </template>
                         <template #footer>
                             <div class="flex gap-3 mt-1">
-                                <router-link to="/markets" class="main_btn px-5"> اكتشف </router-link>
+                                <router-link to="/markets" class="main_btn px-5"> {{  $t('home.explore')  }} </router-link>
                             </div>
                         </template>
                     </Card>

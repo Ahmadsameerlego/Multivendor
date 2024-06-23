@@ -1,16 +1,16 @@
 <template>
   <div class="pt-5 pb-5">
     <div class="container">
-      <h5 class="fw-bold text-center">جميع متاجرنا</h5>
+      <h5 class="fw-bold text-center"> {{ $t('store.all') }} </h5>
     </div>
 
     <div class="container">
-      <div class="flex_end mt-4">
+      <div class="flex_end mt-4 filters">
         <div class="form-group search_market position-relative">
           <input
             type="text"
             class="form-control"
-            placeholder="ابحث عن اسم المتجر"
+              :placeholder="$t('store.search')"
             @input="searchMarket"
             v-model="marketName"
           />
@@ -19,14 +19,14 @@
 
         <div class="mx-4">
           <select v-model="catId" id="" class="form-select" @change="getCatStores">
-            <option value="" selected hidden>اختر نوع المتجر</option>
+            <option value="" selected hidden>{{ $t('store.choose') }}</option>
             <option v-for="cat in categories" :key="cat.id" :value="cat.id"> {{ cat.name  }} </option>
           </select>
         </div>
 
         <div class="">
           <select v-model="cityId" id="" class="form-select" @change="getCityStores">
-            <option value="" selected hidden>اختر اقرب مدينة لك</option>
+            <option value="" selected hidden>{{  $t('store.near')  }}</option>
             <option v-for="cat in citites" :key="cat.id" :value="cat.id"> {{ cat.name  }} </option>
             
           </select>
@@ -65,11 +65,11 @@
                 <!-- status  -->
                 <div class="status" v-if="store.is_open == true">
                   <span class="icon open"></span>
-                  <span>مفتوح</span>
+                  <span> {{  $t('store.open')  }} </span>
                 </div>
                 <div class="status" v-else>
                   <span class="icon closed"></span>
-                  <span>مغلق الان</span>
+                  <span>{{  $t('store.close')  }}</span>
                 </div>
               </div>
             </router-link>
@@ -77,7 +77,7 @@
         </div>
 
         <div v-else>
-          <Message severity="error">No Stores Avilable</Message>
+          <Message severity="error"> {{  $t('store.empty')  }} </Message>
 
         </div>
       </div>

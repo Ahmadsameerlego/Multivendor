@@ -1,9 +1,9 @@
 <template>
     <div class="pt-5 pb-5">
         <section class="branches">
-             <h4 class="text-center fw-bold"> فروعنا في المملكة </h4>
+             <h4 class="text-center fw-bold"> {{ $t('home.branches') }} </h4>
             <p class="fs-5 fw-6">
-                اين توجد متاجرنا ؟
+                {{  $t('home.whereBranches')  }}
             </p>
 
             <div class="container">
@@ -12,7 +12,7 @@
                         <div class="single_branch flex_between">
                             <div class="d-flex justify-content-start flex-column align-items-start">
                                 <h5 class="fw-bold"> {{ city.name }} </h5>
-                                <router-link to="/"> اطلع علي المزيد </router-link>
+                                <router-link to="/"> {{ $t('home.showMore') }} </router-link>
                             </div>
 
                             <div>

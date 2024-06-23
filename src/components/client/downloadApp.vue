@@ -1,7 +1,7 @@
 <template>
     <div class="pt-5 pb-5">
         <section>
-            <div class="row">
+            <div class="row rowOVer">
                 <div class="col-md-6 mb-3">
                     <div class="downloadapp_image">
                         <img src="@/assets/imgs/app.png" alt="">
@@ -9,13 +9,13 @@
                 </div>
                 <div class="col-md-6 d-flex flex-column align-items-start">
                     <div class="d-flex flex-column align-items-start">
-                        <h4 class="fw-bold"> اكتشف تطبيقنا الجديد </h4>
+                        <h4 class="fw-bold"> {{  $t('home.App')  }} </h4>
                         <p class="fs-5">
-                            احصل على كل ما تحتاجه، متى ما تحتاجه.
+                            {{  $t('home.appDesc')  }}.
                         </p>
                     </div>
 
-                    <div class="d-flex">
+                    <div class="download d-flex">
                         <div class="single_download">
                             <a href="#">
                                 <img src="@/assets/imgs/googleplay.png" alt="">
