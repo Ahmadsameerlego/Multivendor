@@ -73,6 +73,9 @@ export default {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
+        localStorage.setItem('lat', position.coords.latitude)
+        localStorage.setItem('lng', position.coords.longitude)
+
       });
     },
     // get new value after dragged

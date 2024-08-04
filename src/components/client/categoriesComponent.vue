@@ -4,7 +4,7 @@
         <p class="fs-5 fw-6">
                 {{  $t('home.discoverDesc')  }}
         </p>
-        <div class="">
+        <div class="" v-if="categories.length>0">
             <div class="row">
                 <div class="col-md-4 mb-3" v-for="(cat, index) in categories" :key="index">
                     <Card style="pt-3">
@@ -28,12 +28,17 @@
                 
             </div>     
         </div>
+        <div v-else>
+                 <Message severity="info" > {{  $t('prod.empty')  }} </Message>
+
+        </div>
     </div>
    
 </template>
 
 <script>
 import Card from 'primevue/card';
+import Message from 'primevue/message';
 
 export default {
     name: 'MultivendorCategoriesComponent',
@@ -54,7 +59,8 @@ export default {
         
     },
     components: {
-        Card
+        Card,
+        Message
     }
 };
 </script>

@@ -95,7 +95,17 @@
             </div>
           </div>
 
-        
+           <div class="col-md-6 mb-3">
+            <div class="form-group mb-3 flex-column d-flex align-items-start">
+              <label for=""> الدولة </label>
+               <Dropdown
+                  v-model="selectedCountry"
+                  :options="countries"
+                  optionLabel="name"
+                  class="w-full w-100"
+                />
+            </div>
+          </div>
 
           
         </div>
@@ -273,6 +283,8 @@ export default {
       fd.append('last_name', this.last_name)
       fd.append('phone', this.phone)
       fd.append('email', this.email)
+      fd.append('country', JSON.stringify(this.selectedCountry))
+      
       
       if (this.selectedCountry) {
                 fd.append('country_key', this.selectedCountry.code)
@@ -406,7 +418,7 @@ export default {
     opacity: 0;
   }
 }
-.p-dropdown {
+.country_code .p-dropdown {
   position: absolute !important;
   width: 25%;
   top: 32px !important;

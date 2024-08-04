@@ -1,9 +1,9 @@
 <template>
   <section class="auth">
-    <section class="login_form flex_center flex-column">
+    <section class="login_form flex_center flex-column pb-3">
       <!-- login image  -->
       <div class="login_image mb-4" style="width: 150px; height: 150px">
-        <img src="@/assets/imgs/coffee1.webp" alt="" />
+        <img src="@/assets/imgs/logo.png" alt="" />
       </div>
 
       <h5 class="fw-bold mb-3 mainColor">مرحبا بك</h5>
@@ -14,6 +14,13 @@
           <router-link to="/" class="login_underLine"> ارسل لنا </router-link>
         </span>
       </div> -->
+
+
+                 <GoogleLogin :callback="callback" class="google_login">سجل عن طريق الايميل </GoogleLogin>
+
+                 <h6 class="fw-bold text-center">أو </h6>
+
+
 
       <form ref="loginForm" @submit.prevent="login">
         <div class="form-group mb-3 flex-column d-flex align-items-start">
@@ -78,6 +85,8 @@
           </span>
         </div>
       </form>
+
+
     </section>
 
     <!-- logo image  -->
@@ -94,6 +103,10 @@
 <script>
 import Password from "primevue/password";
 import InputText from "primevue/inputtext";
+import decodeCredential from 'vue3-google-login'
+
+// import { vue3GoogleLogin } from 'vue3-google-login';
+
 import Dropdown from "primevue/dropdown";
 // import ProgressSpinner from 'primevue/progressspinner';
 import axios from 'axios';
@@ -105,7 +118,11 @@ export default {
       countries: [],
       disabled: false,
       password: '',
-      phone_email : ''
+      phone_email: '',
+      googleSignInParams: {
+        client_id: '597646459789-p7phtdta1l3lr866lj5uesp4sr5pbipe.apps.googleusercontent.com', // Replace with your actual client ID
+        scope: 'profile email',
+      },
     };
   },
 
@@ -119,6 +136,13 @@ export default {
   },
 
   methods: {
+    callback(response) {
+      console.log(response)
+      const userData = decodeCredential(response.credential)
+       console.log('dataaaaaaaaaaaaa')
+  console.log("Handle the userData", userData)
+
+},
     // get countries 
     async getCountries() {
       await axios.get('countries')
@@ -163,12 +187,32 @@ export default {
     Password,
     InputText,
     Dropdown,
-    Toast
+    Toast,
+    // vue3GoogleLogin 
   },
 };
 </script>
 
 <style lang="scss">
+.google_login{
+border: 1px solid #734b21;
+    border-radius: 4px;
+    padding: 6px 10px;
+    color: #734b21;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.g-signin-button {
+  /* This is where you control how the button looks. Be creative! */
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background-color: #3c82f7;
+  color: #fff;
+  box-shadow: 0 3px 0 #0f69ff;
+}
 label {
   color: #000;
   font-size: 16px;

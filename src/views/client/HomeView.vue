@@ -9,7 +9,7 @@
     <footerComponentVue />
   </div>
 </template>
-
+ 
 <script>
 import headerComponentVue from '@/components/client/headerComponent.vue';
 import LocationComponentVue from '@/components/client/LocationComponent.vue';
@@ -25,7 +25,8 @@ export default {
     return {
       cities: [],
       ads: [],
-        categories : []
+      categories: [],
+        country_id : ''
       }
   },
   components: {
@@ -39,7 +40,7 @@ export default {
   },
   methods: {
     async getHome() {
-      await axios.get('user/home')
+      await axios.get(`user/home?lat=${localStorage.getItem('lat')}&long=${localStorage.getItem('lng')}&country_id=${this.currentCountry.id}`)
         .then((res) => {
           this.categories = res.data.data.categories;
           this.ads = res.data.data.ads;
@@ -47,8 +48,31 @@ export default {
       } )
     }
   },
+   watch: {
+    countryId(newId, oldId) {
+      // This function will run whenever the country id changes
+       this.getHome();
+      console.log(newId , oldId)
+    }
+
+  },
+    computed: {
+    currentCountry() {
+      return this.$store.state.country;
+      },
+    countryId() {
+      return this.$store.state.country.id;
+    }
+
+  },
   mounted() {
     this.getHome();
+    // if (localStorage.getItem('token') ) {
+    //   this.country_id = JSON.parse(localStorage.getItem('user')).country.id
+    // }
+    // else {
+    //   this.country_id = 12
+    // }
   }
 }
 </script>

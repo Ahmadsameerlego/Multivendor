@@ -5,7 +5,7 @@
             {{  $t('home.offersDesc')  }}
         </p>
 
-        <section class="offers">
+        <section class="offers" v-if="ads.length>0">
             <div class="container">
                 <swiper
                     :slides-per-view="3"
@@ -34,12 +34,19 @@
             </div>
             
         </section>
+          <div v-else>
+                <div class="container">
+                   <Message severity="info" > {{  $t('order.noOffers')  }} </Message>
+                </div>
+
+        </div>
     </div>
 </template>
 
 <script>
   // Import Swiper Vue.js components
   import { Swiper, SwiperSlide } from 'swiper/vue';
+import Message from 'primevue/message';
 
   // Import Swiper styles
 import 'swiper/css';
@@ -51,6 +58,7 @@ export default {
     components: {
       Swiper,
       SwiperSlide,
+      Message
     },
     setup() {
          return {

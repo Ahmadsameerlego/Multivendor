@@ -49,10 +49,26 @@ export default {
             .then( (res)=>{
                 this.terms = res.data.data
             } )
-        }
+        },
+        // get orders
+        async getPartener(){
+            const token = localStorage.getItem('token');
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
+            await axios.get('store/policy', {headers})
+            .then( (res)=>{
+                this.terms = res.data.data
+            } )
+        },
     },
     mounted(){
-        this.getOrders()
+      if (this.$route.fullPath.includes('partenerPrivacy')) {
+          this.getPartener()
+      } else {
+                this.getOrders()
+
+        }
     }
 }
 </script>

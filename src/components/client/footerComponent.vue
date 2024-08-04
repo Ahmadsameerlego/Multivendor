@@ -6,40 +6,8 @@
           
           <div class="section poppular-links border-bottom w-100 py-5 pb-md-0">
             <div class="fs-13 row">
-              <div class="col-sm-4 p-0">
-                <div class="accordion accordion-flush" id="restaurantAccordion">
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="restaurantHeading">
-                      <button
-                        class="accordion-button f-14 mb-2"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseRestaurants"
-                        aria-expanded="true"
-                        aria-controls="collapseRestaurants"
-                      >
-                        {{  $t('home.stores')  }}
-                      </button>
-                    </h2>
-                    <div
-                      id="collapseRestaurants"
-                      class="accordion-collapse collapse show"
-                      aria-labelledby="restaurantHeading"
-                      data-bs-parent="#restaurantAccordion"
-                    >
-                      <div
-                        class="accordion-body d-flex flex-column justify-content-start align-items-start"
-                      >
-                        <router-link :to="'/market/'+store.id" v-for="store in stores" :key="store.id"  class="btn btn-link pl-5 pt-3">
-                          {{ store.name }}
-                        </router-link>
-                        
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-4 p-0">
+            
+              <div class="col-sm-3 p-0">
                 <div class="accordion accordion-flush" id="cuisineAccordion">
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="cuisineHeading">
@@ -71,7 +39,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-4 p-0">
+              <div class="col-sm-3 p-0">
                 <div class="accordion accordion-flush" id="aboutAccordion">
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="aboutHeading">
@@ -125,6 +93,82 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-sm-3 p-0">
+                <div class="accordion accordion-flush" id="aboutAccordion">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="aboutHeading">
+                      <button
+                        class="accordion-button f-14 mb-2"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseAbout"
+                        aria-expanded="true"
+                        aria-controls="collapseAbout"
+                      >
+                        {{  $t('nav.join_partener')  }}
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseAbout"
+                      class="accordion-collapse collapse show"
+                      aria-labelledby="aboutHeading"
+                      data-bs-parent="#aboutAccordion"
+                    >
+                      <div
+                        class="accordion-body d-flex flex-column justify-content-start align-items-start"
+                      >
+                        
+                       
+                        <router-link
+                          to="/partenerPrivacy"
+                          class="btn btn-link pl-5 pt-3"
+                          >
+                            {{  $t('home.privacy')  }}
+                          </router-link
+                        >
+                        <router-link to="/partenerTerms" class="btn btn-link pl-5 pt-3"
+                          >
+                          {{  $t('home.terms')  }}
+                          </router-link
+                        >
+                      
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-3 p-0">
+                <div class="accordion accordion-flush" id="aboutAccordion">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="aboutHeading">
+                      <button
+                        class="accordion-button f-14 mb-2"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseAbout"
+                        aria-expanded="true"
+                        aria-controls="collapseAbout"
+                      >
+                        {{  $t('nav.social')  }}
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseAbout"
+                      class="accordion-collapse collapse show"
+                      aria-labelledby="aboutHeading"
+                      data-bs-parent="#aboutAccordion"
+                    >
+                      <div class="socials d-flex justify-content-center align-items-center">
+                        <a  class="mx-3" target="_blank" :href="social.link" v-for="social in socials" :key="social.id">
+                          <img :src="social.image" width="30" height="30" style="border-radius:50%" alt="">
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -137,6 +181,13 @@
         </div>
       </div>
     </div>
+
+    <div class="whatsApp">
+      <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+      <a href="https://api.whatsapp.com/send?phone=+201009920212&text=اهلا coffeeKies " class="float" target="_blank">
+<i class="fa-brands fa-whatsapp"></i>    
+    </a>
+    </div>
   </div>
 </template>
 
@@ -148,12 +199,14 @@ export default {
   data() {
     return {
       stores: [],
-      best_stores : []
+      best_stores: [],
+      socials : []
     };
   },
 
   mounted() {
     this.getStores();
+    this.getSocials();
   },
 
   methods: {
@@ -168,11 +221,45 @@ export default {
           this.best_stores = res.data.data.best_stores;
       } )
     },
+    async getSocials() {
+      await axios.get(`user/socials`, {
+        headers: {
+          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+        }
+      })
+        .then((res) => {
+          // console.log(res.data);
+          this.socials = res.data.data;
+      } )
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:#25d366;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+  font-size:30px;
+	box-shadow: 2px 2px 3px #999;
+  z-index:100;
+      display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.my-float{
+	margin-top:16px;
+}
+
 .footer {
   background-color: #262626;
   color: rgb(255, 255, 255);

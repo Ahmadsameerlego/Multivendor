@@ -71,6 +71,17 @@
               />
             </div>
           </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-group mb-3 flex-column d-flex align-items-start">
+              <label for=""> الدولة </label>
+               <Dropdown
+                  v-model="selectedCountryName"
+                  :options="countries"
+                  optionLabel="name"
+                  class="w-full md:w-14rem"
+                />
+            </div>
+          </div>
 
         
 
@@ -149,6 +160,7 @@ export default {
                 countries: [],
           disabled: false,
           selectedCountry: null,
+          selectedCountryName: null,
           phone: '',
           email: '',
           first_name: '',
@@ -176,7 +188,8 @@ export default {
       fd.append('password', this.password)
       if (this.selectedCountry) {
                 fd.append('country_key', this.selectedCountry.code)
-        
+                fd.append('country_id', this.selectedCountry.id)
+
       }
       fd.append('device_type', 'web')
       fd.append('device_id', localStorage.getItem('device_id'))

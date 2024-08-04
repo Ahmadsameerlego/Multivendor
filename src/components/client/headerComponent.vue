@@ -56,6 +56,19 @@
                   {{  $t('nav.offers')  }}
                 </router-link>
               </li>
+               <li class="nav-item kEkINZ pa-m-0 become-partner-li px-sm">
+                <router-link
+                  rel="noreferrer"
+                  class="jYUbJg pa-m-10 f-m-14"
+                  to="/partener"
+                  >
+                        {{  $t('nav.join_partener')  }}
+                </router-link>
+              </li>
+
+
+           
+                
               <!-- <li class="nav-item kEkINZ d-sm-block px-2">
                 <a
                   data-testid="switch-language-link"
@@ -76,8 +89,9 @@
                <li class="nav-item kEkINZ d-sm-block px-2" v-if="isAuthed">
                 <router-link
                   to="/cart"
-                  class="cart"
+                  class="cart position-relative"
                   >
+                  <span class="cart_numer" >  {{cart}}</span>
                   <i class="fa-solid fa-cart-shopping"></i>
                   </router-link
                 >
@@ -117,7 +131,34 @@
                   {{ $t('nav.login') }}
                 </router-link>
               </li>
-               <div class="dropdown profile br-5" v-if="isAuthed">
+
+
+                 <div class="dropdown profile br-5"  >
+            <button
+              class="btn dropdown-toggle  br-5 pt-2 pb-2 main_btn"
+              type="button"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              
+              <span class="name"> {{ currentCountry.name }}</span>
+
+              <!-- <i class="fa-regular fa-user user_profile"></i> -->
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li class="mb-3" v-for="country in countries" :key="country.id">
+                <button
+                  class="dropdown-item d-flex justify-content-start align-items-center"
+                  @click="chageCountry(country)"
+                > 
+                  <span class="mx-2 fw-6"> {{  country.name  }} </span>
+                </button>
+              </li>
+            </ul>
+                </div>
+
+               <div class="dropdown profile br-5 mx-3" v-if="isAuthed">
             <button
               class="btn dropdown-toggle px-4 br-5 pt-2 pb-2 main_btn"
               type="button"
@@ -214,7 +255,7 @@
 <script>
 import axios from 'axios';
 import Toast from 'primevue/toast';
-
+import { mapState } from 'vuex';
 export default {
   name: "MultivendorHeaderComponent",
 
@@ -222,10 +263,29 @@ export default {
     return {
       isAuthed: false,
       username: '',
-      image : ''
+      image: '',
+      country: '',
+      countries: [],
+      country_id: '',
+      country_name : 'السعودية'
     };
   },
   methods: {
+    chageCountry(country) {
+      // this.country_id = country.id;
+      // this.country_name = country.name;
+
+
+      // localStorage.setItem('country_name', country.name)
+      // localStorage.setItem('country_id', country.id)
+
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000);
+      this.$store.dispatch('changeCountry', country);
+
+
+    },
     switchLang(){
             let lang = 'ar';
             if(this.$i18n.locale == 'ar'){
@@ -293,25 +353,68 @@ export default {
                     this.$toast.add({ severity: 'error', summary: res.data.msg, life: 3000 });
                 }
             } )
-        },
+    },
+
+     async getCountries() {
+       await axios.get('countries', {
+         headers: {
+          lang : 'ar'
+        }
+      })
+        .then((res) => {
+        this.countries = res.data.data
+      } )
+    },
   },
   components: {
     Toast
   },
+  computed: {
+    ...mapState({
+      cart: state => state.cart
+    }),
+
+        currentCountry() {
+      return this.$store.state.country;
+    }
+
+  },
   mounted() {
+    this.getCountries()
     if( localStorage.getItem('token') ){
-            this.isAuthed = true ;
+      this.isAuthed = true;
+        
         }
         if( localStorage.getItem('user') ){
-            this.username = JSON.parse(localStorage.getItem('user')).first_name ;
+          this.username = JSON.parse(localStorage.getItem('user')).first_name;
+          // localStorage.setItem('country_id', JSON.parse(localStorage.getItem('user')).country.id);
+          // localStorage.setItem('country_name', JSON.parse(localStorage.getItem('user')).country.name);
+          //   this.country_id = localStorage.getItem('country_id') ;
+          //   this.country_name = localStorage.getItem('country_name') ;
             this.image = JSON.parse(localStorage.getItem('user')).image ;
-        }
+    }
+   
   },
 
 };
 </script>
 
 <style lang="scss" scoped>
+.cart_numer{
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #f10f0f;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    left: -5px;
+    top: -5px;
+}
  .lang{
                 background-color: transparent;
                 color:#fff ;
@@ -340,6 +443,9 @@ export default {
     font-size: 16px;
     margin: 0 14px;
     font-weight: 600;
+  }
+  svg{
+    font-size: 25px !important;
   }
 }
 .btn-login {

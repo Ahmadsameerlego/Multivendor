@@ -7,7 +7,7 @@
             </p>
 
             <div class="container">
-                <section class="row mt-4">
+                <section class="row mt-4" v-if="cities.length>0">
                     <div class="col-md-3 mb-3" v-for="(city , index) in cities" :key="index">
                         <div class="single_branch flex_between">
                             <div class="d-flex justify-content-start flex-column align-items-start">
@@ -21,6 +21,7 @@
                         </div>
                     </div>
                 </section>
+                 <Message severity="info" v-else > {{  $t('home.not_cities')  }} </Message>
             </div>
             
         </section>
@@ -28,6 +29,9 @@
 </template>
 
 <script>
+
+import Message from 'primevue/message';
+
 export default {
     name: 'MultivendorBranchesComponent',
 
@@ -39,6 +43,9 @@ export default {
 
     mounted() {
         
+    },
+    components: {
+      Message  
     },
     props: {
         cities : []  

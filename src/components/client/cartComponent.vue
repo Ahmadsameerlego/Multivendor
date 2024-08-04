@@ -372,7 +372,22 @@ async getCart() {
             setTimeout(() => {
               this.getCart()
             }, 1000);
-          } else {
+          }
+          else if (res.data.key == 'unauthenticated') {
+            this.$toast.add({
+              severity: "error",
+              summary: res.data.msg,
+              life: 3000,
+            });
+
+            setTimeout(() => {
+                this.$router.push('/login')
+
+              localStorage.removeItem('user')
+              localStorage.removeItem('token')
+            }, 1000);
+          }
+          else {
            this.$toast.add({
               severity: "error",
               summary: res.data.msg,
@@ -400,6 +415,7 @@ async getCart() {
            });
             setTimeout(() => {
               this.getCart()
+              this.$store.commit('decreament')
             }, 1000);
           } else {
            this.$toast.add({

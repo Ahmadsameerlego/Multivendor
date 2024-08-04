@@ -158,7 +158,7 @@ export default {
 
   methods: {
     async getStores() {
-      await axios.get(`user/stores`, {
+      await axios.get(`user/stores?lat=${localStorage.getItem('lat')}&long=${localStorage.getItem('lng')}&country_id=${this.currentCountry.id}`, {
         headers: {
           Authorization :  `Bearer ${localStorage.getItem('token')}` ,
         }
@@ -212,6 +212,24 @@ export default {
     }
 
   },
+  watch: {
+    countryId(newId, oldId) {
+      // This function will run whenever the country id changes
+       this.getStores();
+      console.log(newId , oldId)
+    }
+
+  },
+    computed: {
+    currentCountry() {
+      return this.$store.state.country;
+      },
+    countryId() {
+      return this.$store.state.country.id;
+    }
+
+  },
+
   components: {
     Message
   }

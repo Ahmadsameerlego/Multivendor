@@ -37,4 +37,9 @@ nav {
     }
   }
 }
+    .header .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width:100% !important;
+    }
+
+
 </style>

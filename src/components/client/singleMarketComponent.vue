@@ -131,7 +131,7 @@ export default {
 
       await axios.post(`user/add-to-cart?product_id=${id}`,fd , {
          headers: {
-          Authorization :  `Bearer ${localStorage.getItem('token')}` ,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
       })
         .then((res) => {
@@ -142,9 +142,25 @@ export default {
               life: 3000,
            });
             setTimeout(() => {
-              this.$router.push('/cart')
+              this.$store.commit('increament')
             }, 2000);
-          } else {
+          }
+          else if (res.data.key == 'unauthenticated') {
+            this.$toast.add({
+              severity: "error",
+              summary: res.data.msg,
+              life: 3000,
+            });
+
+            setTimeout(() => {
+                this.$router.push('/login')
+
+              localStorage.removeItem('user')
+              localStorage.removeItem('token')
+            },1000 );
+          }
+
+          else {
            this.$toast.add({
               severity: "error",
               summary: res.data.msg,

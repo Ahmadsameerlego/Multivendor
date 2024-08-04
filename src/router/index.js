@@ -14,7 +14,9 @@ import forgetPassword from "../views/client/forgetPassword.vue"
 import resetPassword from "../views/client/resetPassword.vue"
 import profile from '../views/client/profileView.vue'
 import privacy from "../views/client/privacyView.vue";
+// import partenerPrivacy from "../views/client/privacyView.vue";
 import terms from "../views/client/termsConditionView.vue"
+// import partenerTerms from "../views/client/termsConditionView.vue";
 import us from "../views/client/whoUsView.vue"
 import contact from "../views/client/contactUS.vue"
 import changePassword from "../views/client/changePassword.vue"
@@ -23,8 +25,12 @@ import reservatiosn from "../views/client/reservationsView.vue"
 import reservationDetails from "../views/client/rerservationDetails.vue"
 import orderDetails from "../views/client/orderDetails.vue"
 import notification from "../views/client/notificationView.vue"
-
+import partener from "../views/vendor/joinPartener.vue"
 const routes = [
+  {
+    path: "/partener",
+    component: partener,
+  },
   {
     path: "/notification",
     component: notification,
@@ -62,7 +68,15 @@ const routes = [
     component: terms,
   },
   {
+    path: "/partenerTerms",
+    component: terms,
+  },
+  {
     path: "/privacy",
+    component: privacy,
+  },
+  {
+    path: "/partenerPrivacy",
     component: privacy,
   },
   {

@@ -32,6 +32,8 @@ import VOtpInput from "vue3-otp-input";
 
 import VueGoogleMaps from "@fawmi/vue-google-maps";
 
+import vue3GoogleLogin from "vue3-google-login";
+
 // import axios
 import axios from "axios";
 axios.defaults.baseURL = "https://coffeekies.trysnapus.com/api/";
@@ -56,6 +58,10 @@ createApp(App)
   .use(VueI18n)
   .use(FontAwesomeIcon)
   .use(Paginate)
+  .use(vue3GoogleLogin, {
+    clientId:
+      "597646459789-p7phtdta1l3lr866lj5uesp4sr5pbipe.apps.googleusercontent.com",
+  })
   .component("v-otp-input", VOtpInput)
   .use(PrimeVue)
   .use(ToastService)

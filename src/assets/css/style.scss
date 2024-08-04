@@ -306,6 +306,11 @@ $main-color2: #6D98DB   ;
 .search_market input, .search_market select{width: 100% !important;}
 .filters div{width: 100%;    margin-bottom: 12px !important;
 }
+@media (min-width: 1200px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: 1200px !important    ;
+    }
+}
 .statuses{
     flex-direction: column !important;
 }
@@ -314,6 +319,7 @@ $main-color2: #6D98DB   ;
 
     margin-bottom: 12px;
 }
+
 .market_info .market_details{width: 100% !important;}
 .discount-sign{
     right: 0 !important;
@@ -405,4 +411,11 @@ $main-color2: #6D98DB   ;
     border: 1px solid #734b21 !important;
     background-color: #fff !important;
     color: #734b21 !important;
+}
+
+
+.p-message-wrapper{
+        display: flex !important;
+    justify-content: space-between !important;
+
 }
